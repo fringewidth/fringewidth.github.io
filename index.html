@@ -11,7 +11,7 @@
 <body>
   <div id="navbar"></div>
   <div id="content"></div>
-  <footer><div id="footer"></div></footer>
+  <footer><div id="footer">(∪｡∪)｡｡｡zzZ</div></footer>
   <script>
     function loadMd(id, file) {
       $.get(file, md => $(id).html(marked.parse(md)))
@@ -26,7 +26,6 @@
         loadMd("#navbar", config.navbar)
         const contentFile = getParam("content") || config.home
         loadMd("#content", contentFile)
-        loadMd("#footer", config.footer)
       })
     })
 
@@ -42,6 +41,98 @@
         const contentFile = getParam("content") || config.home
         loadMd("#content", contentFile)
       })
+    })
+
+    // Footer animation module
+    const FooterAnimator = {
+      // Configuration
+      config: {
+        sleepTimeStart: 23, // 11pm
+        sleepTimeEnd: 7,    // 7am
+        intervals: {
+          sleep: 2000,  // 2 seconds
+          awake: 800    // 0.8 seconds
+        }
+      },
+
+      // Emoji collections
+      emojis: {
+        sleeping: [
+          "[(－－)]..zzzZ", "(－_－) zzZZ", "(∪｡∪)｡｡｡ZZzz", "(－ω－) ...zzz", "(￣o￣) ZZZzzz",
+          "(( _ _ ))..zZzZ", "(￣ρ￣)..zzZZZ", "(－.－)...ZzZz", "(＿ ＿*) z Z z Z", "(x . x) ~~zZzZ"
+        ],
+        awake: [
+          "(* ^ ω ^)", "(´ ∀ ` *)", "ヽ(・∀・)ﾉ", "(☆▽☆)", "。。。ミヽ(。＞＜)ノ",
+          "(✧ω✧)", "☆ﾐ(o*･ω･)ﾉ", "٩(◕‿◕｡)۶", "─=≡Σ((( つ＞＜)つ", "(っ≧ω≦)っ"
+        ]
+      },
+
+      // State
+      state: {
+        currentIndex: 0,
+        interval: null,
+        lastSleepState: null
+      },
+
+      getCurrentTime() {
+        const now = new Date()
+        const istTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}))
+        return {
+          formatted: istTime.toLocaleTimeString("en-US", {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+          }),
+          hour: istTime.getHours()
+        }
+      },
+
+      isSleepTime(hour) {
+        const { sleepTimeStart, sleepTimeEnd } = this.config
+        return hour >= sleepTimeStart || hour < sleepTimeEnd
+      },
+
+      getCurrentState(hour) {
+        const isSleep = this.isSleepTime(hour)
+        return {
+          isSleep,
+          emojis: isSleep ? this.emojis.sleeping : this.emojis.awake,
+          interval: isSleep ? this.config.intervals.sleep : this.config.intervals.awake
+        }
+      },
+
+      updateDisplay() {
+        const time = this.getCurrentTime()
+        const currentState = this.getCurrentState(time.hour)
+        
+        if (this.state.lastSleepState !== currentState.isSleep) {
+          this.handleStateChange(currentState)
+        }
+
+        const emoji = currentState.emojis[this.state.currentIndex]
+        const footerText = `it's ${time.formatted} here.... ${emoji}`
+        $("#footer").text(footerText)
+
+        this.state.currentIndex = (this.state.currentIndex + 1) % currentState.emojis.length
+      },
+
+      handleStateChange(newState) {
+        this.state.lastSleepState = newState.isSleep
+        this.state.currentIndex = 0
+        
+        if (this.state.interval) {
+          clearInterval(this.state.interval)
+        }
+        this.state.interval = setInterval(() => this.updateDisplay(), newState.interval)
+      },
+
+     
+      init() {
+        this.updateDisplay()
+      }
+    }
+    $(function () {
+      FooterAnimator.init()
     })
   </script>
 </body>
