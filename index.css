@@ -15,6 +15,7 @@ body {
     width: 900px;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    line-height: 1.6;
 }
 
 a {
