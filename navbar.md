@@ -1,1 +1,3 @@
-- [home](home.md)
+# hrishik
+- [Home](home.md)
+- [Papers](papers.md)
