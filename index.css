@@ -12,7 +12,9 @@ html {
 body {
     background-color: #1f1b1b;
     color: #cdcdcd;
-    max-width: 900px;
+    width: 900px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 a {
@@ -39,4 +41,8 @@ h1 {
 #content ul {
     list-style-position: inside;
     padding-left: 1em;
+}
+
+footer {
+    text-align: center;
 }

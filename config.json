@@ -1,4 +1,5 @@
 {
     "navbar": "navbar.md",
-    "home": "home.md"
+    "home": "home.md",
+    "footer": "footer.md"
 }
