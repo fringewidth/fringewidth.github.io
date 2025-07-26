@@ -1,4 +1,4 @@
 # hrishik
-- [Home](home.md)
-- [Projects](projects.md)
-- [Papers](papers.md)
+- [home](home.md)
+- [projects](projects.md)
+- [papers](papers.md)
