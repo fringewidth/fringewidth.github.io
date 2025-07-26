@@ -43,96 +43,42 @@
       })
     })
 
-    // Footer animation module
     const FooterAnimator = {
-      // Configuration
-      config: {
-        sleepTimeStart: 23, // 11pm
-        sleepTimeEnd: 7,    // 7am
-        intervals: {
-          sleep: 2000,  // 2 seconds
-          awake: 800    // 0.8 seconds
-        }
+      config: null,
+      index: 0,
+      interval: null,
+      lastSleep: null,
+
+      async init() {
+        const response = await fetch("config.json")
+        this.config = (await response.json()).footerAnimation
+        this.update()
       },
 
-      // Emoji collections
-      emojis: {
-        sleeping: [
-          "[(－－)]..zzzZ", "(－_－) zzZZ", "(∪｡∪)｡｡｡ZZzz", "(－ω－) ...zzz", "(￣o￣) ZZZzzz",
-          "(( _ _ ))..zZzZ", "(￣ρ￣)..zzZZZ", "(－.－)...ZzZz", "(＿ ＿*) z Z z Z", "(x . x) ~~zZzZ"
-        ],
-        awake: [
-          "(* ^ ω ^)", "(´ ∀ ` *)", "ヽ(・∀・)ﾉ", "(☆▽☆)", "。。。ミヽ(。＞＜)ノ",
-          "(✧ω✧)", "☆ﾐ(o*･ω･)ﾉ", "٩(◕‿◕｡)۶", "─=≡Σ((( つ＞＜)つ", "(っ≧ω≦)っ"
-        ]
-      },
-
-      // State
-      state: {
-        currentIndex: 0,
-        interval: null,
-        lastSleepState: null
-      },
-
-      getCurrentTime() {
+      update() {
         const now = new Date()
-        const istTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}))
-        return {
-          formatted: istTime.toLocaleTimeString("en-US", {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true
-          }),
-          hour: istTime.getHours()
-        }
-      },
-
-      isSleepTime(hour) {
-        const { sleepTimeStart, sleepTimeEnd } = this.config
-        return hour >= sleepTimeStart || hour < sleepTimeEnd
-      },
-
-      getCurrentState(hour) {
-        const isSleep = this.isSleepTime(hour)
-        return {
-          isSleep,
-          emojis: isSleep ? this.emojis.sleeping : this.emojis.awake,
-          interval: isSleep ? this.config.intervals.sleep : this.config.intervals.awake
-        }
-      },
-
-      updateDisplay() {
-        const time = this.getCurrentTime()
-        const currentState = this.getCurrentState(time.hour)
+        const time = new Date(now.toLocaleString("en-US", {timeZone: this.config.timezone}))
+        const hour = time.getHours()
+        const isSleep = hour <= this.config.sleepTime.start || hour < this.config.sleepTime.end
         
-        if (this.state.lastSleepState !== currentState.isSleep) {
-          this.handleStateChange(currentState)
+        if (this.lastSleep !== isSleep) {
+          this.lastSleep = isSleep
+          this.index = 0
+          clearInterval(this.interval)
+          this.interval = setInterval(() => this.update(), 
+            isSleep ? this.config.intervals.sleep : this.config.intervals.awake)
         }
 
-        const emoji = currentState.emojis[this.state.currentIndex]
-        const footerText = `it's ${time.formatted} here.... ${emoji}`
-        $("#footer").text(footerText)
-
-        this.state.currentIndex = (this.state.currentIndex + 1) % currentState.emojis.length
-      },
-
-      handleStateChange(newState) {
-        this.state.lastSleepState = newState.isSleep
-        this.state.currentIndex = 0
+        const emojis = isSleep ? this.config.emojis.sleeping : this.config.emojis.awake
+        const emoji = emojis[this.index]
+        const formatted = time.toLocaleTimeString("en-US", {hour: 'numeric', minute: '2-digit', hour12: true})
         
-        if (this.state.interval) {
-          clearInterval(this.state.interval)
-        }
-        this.state.interval = setInterval(() => this.updateDisplay(), newState.interval)
-      },
-
-     
-      init() {
-        this.updateDisplay()
+        $("#footer").text(`it's ${formatted} here.... ${emoji}`)
+        this.index = (this.index + 1) % emojis.length
       }
     }
-    $(function () {
-      FooterAnimator.init()
+    $(async function () {
+      await FooterAnimator.init()
     })
   </script>
 </body>
