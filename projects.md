@@ -5,32 +5,73 @@ some of the stuff i built:
 #### ☸️ [Ved](https://ved-one.vercel.app/) – full stack mock website
 *postgres, react, css, mistral api*
 
-a site for research collaboration. has search, auth, clean styling. wired up postgres with heavy joins and used generative ai to make synthetic data. hacked around a super rate-limited llm with a custom query algorithm.
+a site for research collaboration. 
 
----
+- has search, auth, clean styling. 
+- wired up postgres with heavy joins and used generative ai to make synthetic data.
+- hacked around a super rate-limited llm with exponential backoff (this was cool in early 2024).
 
-#### 📈 [JFit](https://github.com/fringewidth/jfit2) – complexity guesser
-*java, python, scipy, junit*
+[i mean you should see the joins](https://pastes.io/ved-user-page-view).
 
-a tool that takes in array functions and spits out their empirical complexity in one click. fits curves to runtime data to estimate big-o, fully tested.
+there's also a [cool youtube demo](https://www.youtube.com/watch?v=FsQshAGo5vU)
 
 ---
 
 #### 🌍 [State of the World](https://stateoftheworld.vercel.app/) – climate change visualizer
 *azure, mern stack, three.js, cosmos db*
 
-visualizes climate data and news for major economies. built a 3d globe with three.js and a node backend that caches data from cosmos db. serverless functions keep it updated and run sentiment analysis on news with a custom ml model.
+visualizes climate data and news for major economies. 
+
+- 3d globe with three.js and a node backend that caches data from cosmos db.
+- visualizes country-specific temperature changes, co2, and general sentiment.
+- all of this is updated every month with serverless.
+- used cloud AI trained on a custom dataset for estimating if news reported that month was good or bad for climate change. 
+- the custom dataset was downloaded more than 600 times on [kaggle](kaggle.com/datasets/fringewidth/climate-change-news)
+
+the backend API is also open source.
+[here's all the important climate change data for Jan 2024.](https://sotw.azurewebsites.net/months/1/2024)
 
 ---
 
 #### 🐦‍⬛ [Raven](https://github.com/fringewidth/raven) – dimensionality reduction
 *graph theory, data analysis*
 
-algorithm that cuts real-world datasets by up to 50% by treating features as graph nodes and using closeness centers of redundancy clusters. scored better r² than pca.
+- feature selection algorithm based on graph theory.
+- upto 70% reduction in bloated datasets.
+- 40 lines of code (minus docstrings and empty lines)
+- my proudest creation.
+
+[there's an unfinished preprint on this](https://drive.google.com/file/d/1D6dzpmQe6o1U1X3-4uvdHB287tvvCE2a/view?usp=sharing). there's ablation, mathematical proof on why it works, few case studies, everything. one day i will find the time to seek its publication.
 
 ---
 
 #### 🕸️ [Arachnid](https://github.com/dragn0id/arachnid) – web scraping chrome extension
 *dom tree, react*
 
-chrome extension that grabs correlated elements on a page in one click. tested it on amazon, google search, bigbasket, ndtv, india today.
+- chrome extension that grabs correlated elements on a page in one click. 
+- tested it on amazon, google search, bigbasket, ndtv, india today.
+- this was a group project. my contribution was mostly designing the actual scraping algorithm, [ScrapeData.js](https://github.com/dragn0id/arachnid/blob/main/src/components/customComponents/utils/ScrapeData.js) and [selectData.js](https://github.com/dragn0id/arachnid/blob/main/src/components/customComponents/utils/selectData.js)
+
+---
+
+#### 📈 [JFit](https://github.com/fringewidth/jfit2) – empirical complexity guesser
+*java, python, scipy, junit*
+
+- it takes in array functions.
+- spits out their complexity.
+- first coding project.
+
+[here's the result for bubble sobt.](https://tinyurl.com/jfit-bubble-sort)
+
+[also ported it to cpp](https://github.com/fringewidth/cppFit)
+
+---
+
+### 📑 [This website!](https://github.com/fringewidth/fringewidth.github.io)
+*html, css, jquery*
+
+this entire website is written in my favourite markup, markdown(lol). you can find this page's source [here](https://github.com/fringewidth/fringewidth.github.io/blob/main/projects.md).
+
+after building grandiose websites, you tend to admire the simplicity of the early internet.
+
+thanks to [Marked](https://marked.js.org/), there's only about 80 lines of HTML, most of it is for this footer ⬇️.
