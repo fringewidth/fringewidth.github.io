@@ -57,3 +57,7 @@ hr {
   padding: 0;
   opacity: 0.6;
 }
+
+.nowrap {
+  white-space: nowrap;
+}
