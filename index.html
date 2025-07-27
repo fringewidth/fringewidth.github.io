@@ -1,17 +1,21 @@
 <!doctype html>
 <html>
+
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>hrishik</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
   <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
   <div id="navbar"></div>
   <div id="content">powering up...</div>
-  <footer><div id="footer"></div></footer>
+  <footer>
+    <div id="footer"></div>
+  </footer>
   <script>
     function loadMd(id, file) {
       $.get(file, md => $(id).html(marked.parse(md)))
@@ -57,22 +61,22 @@
 
       update() {
         const now = new Date()
-        const time = new Date(now.toLocaleString("en-US", {timeZone: this.config.timezone}))
+        const time = new Date(now.toLocaleString("en-US", { timeZone: this.config.timezone }))
         const hour = time.getHours()
         const isSleep = hour >= this.config.sleepTime.start || hour < this.config.sleepTime.end
-        
+
         if (this.lastSleep !== isSleep) {
           this.lastSleep = isSleep
           this.index = 0
           clearInterval(this.interval)
-          this.interval = setInterval(() => this.update(), 
+          this.interval = setInterval(() => this.update(),
             isSleep ? this.config.intervals.sleep : this.config.intervals.awake)
         }
 
         const emojis = isSleep ? this.config.emojis.sleeping : this.config.emojis.awake
         const emoji = emojis[this.index]
-        const formatted = time.toLocaleTimeString("en-US", {hour: 'numeric', minute: '2-digit', hour12: true})
-        
+        const formatted = time.toLocaleTimeString("en-US", { hour: 'numeric', minute: '2-digit', hour12: true })
+
         $("#footer").text(`it's ${formatted} here.... ${emoji}`)
         this.index = (this.index + 1) % emojis.length
       }
@@ -82,4 +86,5 @@
     })
   </script>
 </body>
+
 </html>
