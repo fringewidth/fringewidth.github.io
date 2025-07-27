@@ -72,11 +72,11 @@ _java, python, scipy, junit_
 
 ---
 
-### 📑 [This website!](https://github.com/fringewidth/fringewidth.github.io)
+### 📑 This website!
 
 _html, css, jquery_
 
-this entire website is written in my favourite markup, markdown(lol). you can find this page's source [here](https://github.com/fringewidth/fringewidth.github.io/blob/main/projects.md).
+wrote a tiny html+jquery script that turns interlinked md files into a full website. you can find this page's source [here](https://github.com/fringewidth/fringewidth.github.io/blob/main/projects.md), and the full repo [here](https://github.com/fringewidth/fringewidth.github.io)
 
 after building grandiose websites, you tend to admire the simplicity of the early internet.
 
