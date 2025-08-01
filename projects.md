@@ -35,7 +35,7 @@ the backend API is also open source.
 
 ---
 
-#### 🐦‍⬛ [Raven](https://github.com/fringewidth/raven) – dimensionality reduction
+#### 🐦‍⬛ [Raven](https://github.com/fringewidth/raven) – dimensionality reduction {#projects-raven}
 
 _graph theory, data analysis_
 
@@ -72,7 +72,7 @@ _java, python, scipy, junit_
 
 ---
 
-### 📑 This website!
+#### 📑 This website!
 
 _html, css, jquery_
 
