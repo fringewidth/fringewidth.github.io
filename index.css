@@ -28,6 +28,10 @@ h1 {
   font-size: 1.5em;
 }
 
+.header {
+  text-decoration: none;
+}
+
 #navbar ul {
   list-style: none;
   display: flex;
