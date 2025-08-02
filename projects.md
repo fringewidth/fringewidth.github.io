@@ -2,7 +2,7 @@ some of the stuff i built:
 
 ---
 
-#### ☸️ Ved – full stack mock website {#projects-ved}
+#### ☸️ [Ved](https://ved-one.vercel.app/) – full stack mock website
 
 _postgres, react, css, mistral api_
 
@@ -18,7 +18,7 @@ there's also a [cool youtube demo](https://www.youtube.com/watch?v=FsQshAGo5vU)
 
 ---
 
-#### 🌍 State of the World – climate change visualizer {#projects-sotw}
+#### 🌍 [State of the World](https://stateoftheworld.vercel.app/) – climate change visualizer
 
 _azure, mern stack, three.js, cosmos db_
 
@@ -35,7 +35,7 @@ the backend API is also open source.
 
 ---
 
-#### Raven - dimensionality reduction algorithm {#projects-raven}
+#### 🐦‍⬛ [Raven](https://github.com/fringewidth/raven) – dimensionality reduction {#projects-raven}
 
 _graph theory, data analysis_
 
@@ -48,7 +48,8 @@ _graph theory, data analysis_
 
 ---
 
-#### 🕸️ Arachnid  – web scraping chrome extension {#projects-arachnid}
+#### 🕸️ [Arachnid](https://github.com/dragn0id/arachnid) – web scraping chrome extension
+
 _dom tree, react_
 
 - chrome extension that grabs correlated elements on a page in one click.
@@ -57,7 +58,7 @@ _dom tree, react_
 
 ---
 
-#### 📈 JFit – empirical complexity guesser {projects-jfit}
+#### 📈 [JFit](https://github.com/fringewidth/jfit2) – empirical complexity guesser
 
 _java, python, scipy, junit_
 
@@ -71,7 +72,7 @@ _java, python, scipy, junit_
 
 ---
 
-#### 📑 This website! {#projects-portfolio}
+#### 📑 This website!
 
 _html, css, jquery_
 

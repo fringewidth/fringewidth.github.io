@@ -8,8 +8,6 @@ Me 👋; Parnika Singh; Anitha J (CSITSS 2024)
 
 we built a graph-based algorithm to spot and remove redundant features in big datasets by treating highly correlated features as connected nodes. it runs faster than pca and does better for storage and training.
 
-this algorithm was the preliminary version of what became [Raven](/?content=projects.md#projects-raven)
-
 ---
 
 #### 🏥 [Privacy Preservation of Cluster Integrity on Web-Scraped Hospital Data](https://ieeexplore.ieee.org/document/10958977)
