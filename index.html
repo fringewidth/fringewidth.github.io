@@ -4,7 +4,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>hrishik</title>
+  <meta name="description" content="hrishik's personal website">
+  </meta>
+  <title>hrishik's website</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked-custom-heading-id/lib/index.umd.js"></script>
@@ -70,7 +72,7 @@
 
       update() {
         const now = new Date()
-        const time = new Date(now.toLocaleString("en-US", { timeZone: this.config.timezone }))
+        const time = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }))
         const hour = time.getHours()
         const isSleep = hour >= this.config.sleepTime.start || hour < this.config.sleepTime.end
 
