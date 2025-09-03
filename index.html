@@ -84,12 +84,12 @@
             isSleep ? this.config.intervals.sleep : this.config.intervals.awake)
         }
 
-        const emojis = isSleep ? this.config.emojis.sleeping : this.config.emojis.awake
-        const emoji = emojis[this.index]
+        const kaomojis = isSleep ? this.config.kaomojis.sleeping : this.config.kaomojis.awake
+        const kaomoji = kaomojis[this.index]
         const formatted = time.toLocaleTimeString("en-US", { hour: 'numeric', minute: '2-digit', hour12: true })
 
-        $("#footer").html(`it's ${formatted} here.... <span class=nowrap>${emoji}</span>`)
-        this.index = (this.index + 1) % emojis.length
+        $("#footer").html(`it's ${formatted} here.... <span class=nowrap>${kaomoji}</span>`)
+        this.index = (this.index + 1) % kaomojis.length
       }
     }
     $(async function () {
