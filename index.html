@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </meta>
   <title>hrishik sai bojnal</title>
-  
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked-custom-heading-id/lib/index.umd.js"></script>
@@ -95,6 +95,26 @@
     $(async function () {
       await FooterAnimator.init()
     })
+
+    function populateNews(id, sliceLength) {
+      $.getJSON("news.json", function (newsArray) {
+        let news_content = "";
+        const items = newsArray.slice();
+        const count = sliceLength || items.length;
+        items
+          .map(item => {
+            [year, month, day] = item.date.split("-");
+            d = new Date(year, month - 1, day);
+            return { date: d.toLocaleDateString(), headline: item.headline }
+          })
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, count)
+          .forEach(item => {
+            news_content += `<tr><td>${item.date}:</td><td>${marked.parse(item.headline)}</td></tr>`;
+          });
+        $(`#${id}`).html(news_content);
+      });
+    }
   </script>
 </body>
 

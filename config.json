@@ -1,40 +1,43 @@
 {
-    "header": "header.md",
-    "navbar": "navbar.md",
-    "home": "home.md",
-    "footer": "footer.md",
-    "footerAnimation": {
-        "timezone": "Asia/Kolkata",
-        "sleepTime": {
-            "start": 21,
-            "end": 5
-        },
-        "intervals": {
-            "sleep": 2000,
-            "awake": 800
-        },
-        "kaomojis": {
-            "sleeping": [
-                "[(－－)]..zzzZ",
-                "(－_－) zzZZ",
-                "(∪｡∪)｡｡｡ZZzz",
-                "(－ω－) ...zzz",
-                "(￣o￣) ZZZzzz",
-                "(( _ _ ))..zZzZ",
-                "(￣ρ￣)..zzZZZ",
-                "(－.－)...ZzZz",
-                "(＿ ＿*) z Z z Z",
-                "(x . x) ~~zZzZ"
-              ],
-            "awake": [
-                "(*^ω^)",
-                "(´ ∀ `*)",
-                "ヽ(・∀・)ﾉ",
-                "(☆▽☆)",
-                "(✧ω✧)",
-                "٩(◕‿◕｡)۶",
-                "(っ≧ω≦)っ"
-            ]
-        }
+  "header": "header.md",
+  "navbar": "navbar.md",
+  "home": "home.md",
+  "footer": "footer.md",
+  "footerAnimation": {
+    "timezone": "Asia/Kolkata",
+    "sleepTime": {
+      "start": 21,
+      "end": 5
+    },
+    "intervals": {
+      "sleep": 2000,
+      "awake": 800
+    },
+    "kaomojis": {
+      "sleeping": [
+        "[(－－)]..zzzZ",
+        "(－_－) zzZZ",
+        "(∪｡∪)｡｡｡ZZzz",
+        "(－ω－) ...zzz",
+        "(￣o￣) ZZZzzz",
+        "(( _ _ ))..zZzZ",
+        "(￣ρ￣)..zzZZZ",
+        "(－.－)...ZzZz",
+        "(＿ ＿*) z Z z Z",
+        "(x . x) ~~zZzZ"
+      ],
+      "awake": [
+        "(*^ω^)",
+        "(´ ∀ `*)",
+        "ヽ(・∀・)ﾉ",
+        "(☆▽☆)",
+        "(✧ω✧)",
+        "٩(◕‿◕｡)۶",
+        "(っ≧ω≦)っ"
+      ]
     }
+  },
+  "news": {
+    "homepageLimit": 5
+  }
 }
