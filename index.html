@@ -99,19 +99,22 @@
     function populateNews(id, sliceLength) {
       $.getJSON("news.json", function (newsArray) {
         let news_content = "";
-        const items = newsArray.slice();
-        const count = sliceLength || items.length;
-        items
+        const count = sliceLength || newsArray.length;
+        const items = newsArray
           .map(item => {
-            [year, month, day] = item.date.split("-");
-            d = new Date(year, month - 1, day);
-            return { date: d.toLocaleDateString(), headline: item.headline }
+            const [year, month, day] = item.date.split("-");
+            return {
+              dateObj: new Date(year, month - 1, day),
+              headline: item.headline
+            };
           })
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .sort((a, b) => b.dateObj - a.dateObj)
           .slice(0, count)
           .forEach(item => {
-            news_content += `<tr><td>${item.date}:</td><td>${marked.parse(item.headline)}</td></tr>`;
+            const localDate = item.dateObj.toLocaleDateString(); // Format for display here
+            news_content += `<tr><td>${localDate}:</td><td>${marked.parse(item.headline)}</td></tr>`;
           });
+
         $(`#${id}`).html(news_content);
       });
     }
