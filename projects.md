@@ -4,7 +4,7 @@ some of the stuff i built:
 
 #### ☸️ Ved – full stack mock website {#projects-ved}
 
-_postgres, react, css, mistral api_
+_postgres, react, css, mistral api_ | ([Source](https://github.com/fringewidth/ved) | [Live](https://ved-one.vercel.app))
 
 a site for research collaboration.
 
@@ -20,7 +20,7 @@ there's also a [cool youtube demo](https://www.youtube.com/watch?v=FsQshAGo5vU)
 
 #### 🌍 State of the World – climate change visualizer {#projects-sotw}
 
-_azure, mern stack, three.js, cosmos db_
+_azure, mern stack, three.js, cosmos db_ | ([Source](https://github.com/fringewidth/stateoftheworld) | [Live](https:/stateoftheworld.vercel.app))
 
 visualizes climate data and news for major economies.
 
@@ -37,7 +37,7 @@ the backend API is also open source.
 
 #### Raven - dimensionality reduction algorithm {#projects-raven}
 
-_graph theory, data analysis_
+_graph theory, data analysis_ | ([Source](https://github.com/fringewidth/raven))
 
 - feature selection algorithm based on graph theory.
 - upto 70% reduction in bloated datasets.
@@ -48,24 +48,26 @@ _graph theory, data analysis_
 
 ---
 
-#### 🕸️ Arachnid  – web scraping chrome extension {#projects-arachnid}
-_dom tree, react_
+#### 🕸️ Arachnid – web scraping chrome extension {#projects-arachnid}
+
+_dom tree, react_ |  ([Source](https://github.com/dragn0id/arachnid))
 
 - chrome extension that grabs correlated elements on a page in one click.
 - tested it on amazon, google search, bigbasket, ndtv, india today.
-- this was a group project. my contribution was mostly designing the actual scraping algorithm, [ScrapeData.js](https://github.com/dragn0id/arachnid/blob/main/src/components/customComponents/utils/ScrapeData.js) and [selectData.js](https://github.com/dragn0id/arachnid/blob/main/src/components/customComponents/utils/selectData.js)
+- this was a group project. my contribution was mostly designing the actual scraping algorithm, [selectData.js](https://github.com/dragn0id/arachnid/blob/main/src/components/customComponents/utils/selectData.js) and [ScrapeData.js](https://github.com/dragn0id/arachnid/blob/main/src/components/customComponents/utils/ScrapeData.js).
+- built this after training the classifier for [state of the world](#projects-sotw). writing custom scrapers for each website was a pain.
 
 ---
 
-#### 📈 JFit – empirical complexity guesser {projects-jfit}
+#### 📈 JFit – empirical complexity guesser {#projects-jfit}
 
-_java, python, scipy, junit_
+_java, python, scipy, junit_ | ([Source](https://github.com/fringewidth/jfit2))
 
 - it takes in array functions.
 - spits out their complexity.
 - first coding project.
 
-[here's the result for bubble sort.](https://tinyurl.com/jfit-bubble-sort)
+[here's the result for bubble sort.](https://github.com/user-attachments/assets/23b4800c-b457-46a1-bdce-e7b3040914e8)
 
 [also ported it to cpp](https://github.com/fringewidth/cppFit)
 
