@@ -1,150 +1,150 @@
 [
-  {
-    "date": "2021-09-20",
-    "headline": "i've ranked 3078 in [KCET](https://en.wikipedia.org/wiki/Common_Entrance_Test), the state's engineering entrance exam. this puts me in the top 1.59% out of 193,447 candidates this year!"
-  },
-  {
-    "date": "2022-01-02",
-    "headline": "i joined the prestigious [RV Institute of Technology and Management](https://rvitm.edu.in/) as student of computer science and engineering"
-  },
-  {
-    "date": "2022-06-24",
-    "headline": "my team won the IEEE inaugural debate competition. we won against 9 teams over three rounds. we debated on electric vehicles, government surveillance, and the influence of social media."
-  },
-  {
-    "date": "2022-11-25",
-    "headline": "i won the IEEE poster design competition! i presented with Dharmisht SVK on gender equality at the workplace. you can find the poster [here](https://drive.google.com/file/d/1JGeRdNotXqKC3_4h9TpLwvqb-lPBXNjn/)"
-  },
-  {
-    "date": "2022-12-22",
-    "headline": "i hosted the prize distribution ceremony for robofiesta 2022, the college technical fest."
-  },
-  {
-    "date": "2023-01-27",
-    "headline": "me and a couple of my buddies launched algoholics, a programming club."
-  },
-  {
-    "date": "2023-02-13",
-    "headline": "our club algoholics crosses 200 registrations, making it the most subscribed club in college!"
-  },
-  {
-    "date": "2023-02-21",
-    "headline": "we organized \"first brew\", the first event of algoholics. we introduced hundreds of juniors to codechef and programming."
-  },
-  {
-    "date": "2023-03-30",
-    "headline": "i was chosen to represent RVITM in the debate section of [yuvotsava](https://en.wikipedia.org/wiki/Visvesvaraya_Technological_University#VTU_Fest), the inter-college cultural fest of VTU. i was part of a team of two."
-  },
-  {
-    "date": "2023-05-20",
-    "headline": "i was made head of team calliope!"
-  },
-  {
-    "date": "2023-05-25",
-    "headline": "i hosted \"trial by trivia\", a quiz competition, as part of the team callope's induction program for new students."
-  },
-  {
-    "date": "2023-05-31",
-    "headline": "we organized a code relay race as part of algoholics' induction program for freshers. each person gets 30 seconds to code before swapping with a team member."
-  },
-  {
-    "date": "2023-06-22",
-    "headline": "i quizmastered 'cognition', an intercollege event for the college technical fest."
-  },
-  {
-    "date": "2023-06-23",
-    "headline": "i organized 'turncoat', a debate competition with yourself. you get two minutes, and you immediately change your stance at the one minute mark."
-  },
-  {
-    "date": "2023-08-03",
-    "headline": "algoholics organized a college wide CP competition. more than a 100 members participated. it was our rite of passing to promote members that scored well"
-  },
-  {
-    "date": "2023-10-28",
-    "headline": "i ranked 16th nationwide in NPTEL discrete mathematics. over 3000 students enrolled, and only 430 cleared the exam."
-  },
-  {
-    "date": "2023-11-23",
-    "headline": "i was asked to be the moderator for the security council track at RVITMUN."
-  },
-  {
-    "date": "2023-12-08",
-    "headline": "i, along with 3 other artists hosted *[spaces of vacancy](https://www.instagram.com/p/C0eT8osCv__)*, a three day art gallery at the famous Rangoli Metro Art Center, MG Road. we were featured on sapthaswara tv!"
-  },
-  {
-    "date": "2024-03-03",
-    "headline": "i was selected for Microsoft's Future Ready Talent program, a virtual internship for three months."
-  },
-  {
-    "date": "2024-04-01",
-    "headline": "i secured 2nd place nationwide in NPTEL secure systems engineering. over 1500 students enrolled with 287 passing the course."
-  },
-  {
-    "date": "2024-05-27",
-    "headline": "as my last stint as anchor for the college, i hosted the inauguration ceremony of sambhram 2024."
-  },
-  {
-    "date": "2024-05-28",
-    "headline": "i organized 'suits' as part of sambhram 2024. it was basically turncoat with a different name."
-  },
-  {
-    "date": "2024-05-29",
-    "headline": "i organized 'slumdog millionaire' an intercollege quiz as part of sambhram 2024. it was my last stint as quizmaster for RVITM."
-  },
-  {
-    "date": "2024-05-29",
-    "headline": "i led the winning team of Codezilla 2024, an intercollege front end web development competition. we had to build a website within 3 hours. this led to [Paws for a Cause](https://dhyaan1.github.io/codezilla2024/)"
-  },
-  {
-    "date": "2024-06-20",
-    "headline": "i completed my virtual internship at Microsoft's future ready talent program."
-  },
-  {
-    "date": "2024-11-05",
-    "headline": "as part of our bachelors' final project into anonymizing location data, me and my team published the '[Hospitals in India](https://www.kaggle.com/datasets/fringewidth/hospitals-in-india)' dataset on kaggle, containing anonymized location data of over 2000 healthcare centers in the country. if you're feeling adventourous, try taking the coordinates of an entry and finding the actual hospital on google maps!"
-  },
-  {
-    "date": "2024-11-07",
-    "headline": "we published '[Dimensionality Reduction via Graph Based Feature Selection](https://ieeexplore.ieee.org/document/10817068)' at IEEE CSITSS 2024, organized by RVCE, Florida International University and Fachhochschule Dortmund. i was first author"
-  },
-  {
-    "date": "2024-11-21",
-    "headline": "i published the [Climate Change News](https://www.kaggle.com/datasets/fringewidth/climate-change-news) on Kaggle, containing 1024 climate change related news articles, and a sentiment label for each article. i scraped this data when building [state of the world](/?content=projects.md#projects-sotw)"
-  },
-  {
-    "date": "2025-01-02",
-    "headline": "i started a six month internship at [Gameberry Labs](https://gameberrylabs.com/) as an SDE Intern."
-  },
-  {
-    "date": "2025-01-09",
-    "headline": "my team published '[Privacy Preservation of Cluster Integrity on Web-Scraped Hospital Data](https://ieeexplore.ieee.org/document/10958977) at IEEE ICAECT 2025. we proposed a pretty neat way to anonymize geospatial data. i was first author"
-  },
-  {
-    "date": "2025-02-19",
-    "headline": "i was invited to give a talk on placement preparation at RVITM, as my subsequent juniors' placement season drew near. i spoke about my learnings and common pitfalls. you can find the slides [here](https://docs.google.com/presentation/d/1EIELdp9pJkHUATWfw0O_eF--eH2MFFZF/edit?usp=sharing&ouid=102196965728428375607&rtpof=true&sd=true), although they're mostly talking points with no detail."
-  },
-  {
-    "date": "2025-03-07",
-    "headline": "RVITM conferred the Merit 2025 award for my academic and extracurricular achievements throughout college."
-  },
-  {
-    "date": "2025-06-01",
-    "headline": "i joined [Gameberry Labs](https://gameberrylabs.com/) full time as an Software Development Engineer!"
-  },
-  {
-    "date": "2025-07-04",
-    "headline": "i graduated from VTU with a bachelor of engineering degree with honours in computer science and engineering. the honours suffix required an additional 18 credits of coursework."
-  },
-  {
-    "date": "2025-08-23",
-    "headline": "my team won *Honourable Mention* and *Best Presentation* at Hackaberry 2025, Gameberry Labs' internal AI hackathon. we built 'Corrupt'(name tba), a stupid but incredibly fun game where you play as a corrupt bank employee trying get your innocent customer to leave you alone."
-  },
-  {
-    "date": "2025-09-04",
-    "headline": "[Climate Change News](https://www.kaggle.com/datasets/fringewidth/climate-change-news) crosses 650 downloads on Kaggle!"
-  },
-  {
-    "date": "2025-09-08",
-    "headline": "[Hospitals in India](https://www.kaggle.com/datasets/fringewidth/hospitals-in-india) crosses 350 downloads on Kaggle!"
-  }
+    {
+        "date": "2021-09-20",
+        "headline": "I've ranked 3078 in [KCET](https://en.wikipedia.org/wiki/Common_Entrance_Test), the state's engineering entrance exam. This puts me in the top 1.59% out of 193,447 candidates this year!"
+    },
+    {
+        "date": "2022-01-02",
+        "headline": "I joined the prestigious [RV Institute of Technology and Management](https://rvitm.edu.in/) as student of computer science and engineering."
+    },
+    {
+        "date": "2022-06-24",
+        "headline": "My team won the IEEE inaugural debate competition. We won against 9 teams over three rounds. We debated on electric vehicles, government surveillance, and the influence of social media."
+    },
+    {
+        "date": "2022-11-25",
+        "headline": "I won the IEEE poster design competition! I presented with Dharmisht SVK on gender equality at the workplace. You can find the poster [here](https://drive.google.com/file/d/1JGeRdNotXqKC3_4h9TpLwvqb-lPBXNjn/)."
+    },
+    {
+        "date": "2022-12-22",
+        "headline": "I hosted the prize distribution ceremony for Robofiesta 2022, the college technical fest."
+    },
+    {
+        "date": "2023-01-27",
+        "headline": "Me and a couple of my buddies launched Algoholics, a programming club."
+    },
+    {
+        "date": "2023-02-13",
+        "headline": "Our club Algoholics crosses 200 registrations, making it the most subscribed club in college!"
+    },
+    {
+        "date": "2023-02-21",
+        "headline": "We organized \"First Brew\", the first event of Algoholics. We introduced hundreds of juniors to CodeChef and programming."
+    },
+    {
+        "date": "2023-03-30",
+        "headline": "I was chosen to represent RVITM in the debate section of [Yuvotsava](https://en.wikipedia.org/wiki/Visvesvaraya_Technological_University#VTU_Fest), the inter-college cultural fest of VTU. I was part of a team of two."
+    },
+    {
+        "date": "2023-05-20",
+        "headline": "I was made head of team Calliope!"
+    },
+    {
+        "date": "2023-05-25",
+        "headline": "I hosted \"Trial by Trivia\", a quiz competition, as part of the team Calliope's induction program for new students."
+    },
+    {
+        "date": "2023-05-31",
+        "headline": "We organized a code relay race as part of Algoholics' induction program for freshers. Each person gets 30 seconds to code before swapping with a team member."
+    },
+    {
+        "date": "2023-06-22",
+        "headline": "I quizmastered 'Cognition', an intercollege event for the college technical fest."
+    },
+    {
+        "date": "2023-06-23",
+        "headline": "I organized 'Turncoat', a debate competition with yourself. You get two minutes, and you immediately change your stance at the one minute mark."
+    },
+    {
+        "date": "2023-08-03",
+        "headline": "Algoholics organized a college wide CP competition. More than a 100 members participated. It was our rite of passing to promote members that scored well."
+    },
+    {
+        "date": "2023-10-28",
+        "headline": "I ranked 16th nationwide in NPTEL discrete mathematics. Over 3000 students enrolled, and only 430 cleared the exam."
+    },
+    {
+        "date": "2023-11-23",
+        "headline": "I was asked to be the moderator for the Security Council track at RVITMUN."
+    },
+    {
+        "date": "2023-12-08",
+        "headline": "I, along with 3 other artists hosted *[Spaces of Vacancy](https://www.instagram.com/p/C0eT8osCv__)*, a three day art gallery at the famous Rangoli Metro Art Center, MG Road. We were featured on Sapthaswara TV!"
+    },
+    {
+        "date": "2024-03-03",
+        "headline": "I was selected for Microsoft's Future Ready Talent program, a virtual internship for three months."
+    },
+    {
+        "date": "2024-04-01",
+        "headline": "I secured 2nd place nationwide in NPTEL secure systems engineering. Over 1500 students enrolled with 287 passing the course."
+    },
+    {
+        "date": "2024-05-27",
+        "headline": "As my last stint as anchor for the college, I hosted the inauguration ceremony of Sambhram 2024."
+    },
+    {
+        "date": "2024-05-28",
+        "headline": "I organized 'Suits' as part of Sambhram 2024. It was basically turncoat with a different name."
+    },
+    {
+        "date": "2024-05-29",
+        "headline": "I organized 'Slumdog Millionaire' an intercollege quiz as part of Sambhram 2024. It was my last stint as quizmaster for RVITM."
+    },
+    {
+        "date": "2024-05-29",
+        "headline": "I led the winning team of Codezilla 2024, an intercollege front end web development competition. We had to build a website within 3 hours. This led to [Paws for a Cause](https://dhyaan1.github.io/codezilla2024/)."
+    },
+    {
+        "date": "2024-06-20",
+        "headline": "I completed my virtual internship at Microsoft's Future Ready Talent program."
+    },
+    {
+        "date": "2024-11-05",
+        "headline": "As part of our bachelors' final project into anonymizing location data, me and my team published the '[Hospitals in India](https://www.kaggle.com/datasets/fringewidth/hospitals-in-india)' dataset on Kaggle, containing anonymized location data of over 2000 healthcare centers in the country. If you're feeling adventurous, try taking the coordinates of an entry and finding the actual hospital on Google Maps!"
+    },
+    {
+        "date": "2024-11-07",
+        "headline": "We published '[Dimensionality Reduction via Graph Based Feature Selection](https://ieeexplore.ieee.org/document/10817068)' at IEEE CSITSS 2024, organized by RVCE, Florida International University and Fachhochschule Dortmund. I was first author."
+    },
+    {
+        "date": "2024-11-21",
+        "headline": "I published the [Climate Change News](https://www.kaggle.com/datasets/fringewidth/climate-change-news) on Kaggle, containing 1024 climate change related news articles, and a sentiment label for each article. I scraped this data when building [State of the World](/?content=projects.md#projects-sotw)."
+    },
+    {
+        "date": "2025-01-02",
+        "headline": "I started a six month internship at [Gameberry Labs](https://gameberrylabs.com/) as an SDE Intern."
+    },
+    {
+        "date": "2025-01-09",
+        "headline": "My team published '[Privacy Preservation of Cluster Integrity on Web-Scraped Hospital Data](https://ieeexplore.ieee.org/document/10958977) at IEEE ICAECT 2025. We proposed a pretty neat way to anonymize geospatial data. I was first author."
+    },
+    {
+        "date": "2025-02-19",
+        "headline": "I was invited to give a talk on placement preparation at RVITM, as my subsequent juniors' placement season drew near. I spoke about my learnings and common pitfalls. You can find the slides [here](https://docs.google.com/presentation/d/1EIELdp9pJkHUATWfw0O_eF--eH2MFFZF/edit?usp=sharing&ouid=102196965728428375607&rtpof=true&sd=true), although they're mostly talking points with no detail."
+    },
+    {
+        "date": "2025-03-07",
+        "headline": "RVITM conferred the Merit 2025 award for my academic and extracurricular achievements throughout college."
+    },
+    {
+        "date": "2025-06-01",
+        "headline": "I joined [Gameberry Labs](https://gameberrylabs.com/) full time as a Software Development Engineer!"
+    },
+    {
+        "date": "2025-07-04",
+        "headline": "I graduated from VTU with a Bachelor of Engineering degree with honours in computer science and engineering. The honours suffix required an additional 18 credits of coursework."
+    },
+    {
+        "date": "2025-08-23",
+        "headline": "My team won *Honourable Mention* and *Best Presentation* at Hackaberry 2025, Gameberry Labs' internal AI hackathon. We built 'Corrupt'(name tba), a stupid but incredibly fun game where you play as a corrupt bank employee trying get your innocent customer to leave you alone."
+    },
+    {
+        "date": "2025-09-04",
+        "headline": "[Climate Change News](https://www.kaggle.com/datasets/fringewidth/climate-change-news) crosses 650 downloads on Kaggle!"
+    },
+    {
+        "date": "2025-09-08",
+        "headline": "[Hospitals in India](https://www.kaggle.com/datasets/fringewidth/hospitals-in-india) crosses 350 downloads on Kaggle!"
+    }
 ]
