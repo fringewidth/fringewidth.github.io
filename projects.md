@@ -55,7 +55,7 @@ _DOM tree, React_ |  ([Source](https://github.com/dragn0id/arachnid))
 - Chrome extension that grabs correlated elements on a page in one click.
 - Tested it on Amazon, Google Search, BigBasket, NDTV, India Today.
 - This was a group project. My contribution was mostly designing the actual scraping algorithm, [selectData.js](https://github.com/dragn0id/arachnid/blob/main/src/components/customComponents/utils/selectData.js) and [ScrapeData.js](https://github.com/dragn0id/arachnid/blob/main/src/components/customComponents/utils/ScrapeData.js).
-- Built this after training the classifier for [State of the World](#projects-sotw). Writing custom scrapers for each website was a pain.
+- Built this after training the classifier for [State of the World](#projects-sotw) because writing custom scrapers for each website was a pain.
 
 ---
 
@@ -77,7 +77,9 @@ _Java, Python, SciPy, JUnit_ | ([Source](https://github.com/fringewidth/jfit2))
 
 _HTML, CSS, jQuery_
 
-Wrote a tiny HTML+jQuery script that turns interlinked MD files into a full website. You can find this page's source [here](https://github.com/fringewidth/fringewidth.github.io/blob/main/projects.md), and the full repo [here](https://github.com/fringewidth/fringewidth.github.io).
+- Wrote a tiny HTML+jQuery script that turns interlinked MD files into a full website. You can find this page's source [here](https://github.com/fringewidth/fringewidth.github.io/blob/main/projects.md), and the full repo [here](https://github.com/fringewidth/fringewidth.github.io).
+- Yes, there are existing solutions that do this, but this one has a data footprint of 150kb and 60% of that is jQuery :)
+- Also hacking together your website from scratch is very fun.
 
 After building grandiose websites, you tend to admire the simplicity of the early internet.
 
