@@ -35,7 +35,7 @@ The backend API is also open source.
 
 ---
 
-#### Raven - Dimensionality Reduction Algorithm {#projects-raven}
+#### 🐦‍⬛ Raven - Dimensionality Reduction Algorithm {#projects-raven}
 
 _Graph theory, data analysis_ | ([Source](https://github.com/fringewidth/raven))
 
@@ -50,7 +50,7 @@ _Graph theory, data analysis_ | ([Source](https://github.com/fringewidth/raven))
 
 #### 🕸️ Arachnid – Web Scraping Chrome Extension {#projects-arachnid}
 
-_DOM tree, React_ |  ([Source](https://github.com/dragn0id/arachnid))
+_DOM tree, React_ | ([Source](https://github.com/dragn0id/arachnid))
 
 - Chrome extension that grabs correlated elements on a page in one click.
 - Tested it on Amazon, Google Search, BigBasket, NDTV, India Today.
