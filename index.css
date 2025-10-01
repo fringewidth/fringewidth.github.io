@@ -91,3 +91,12 @@ hr {
   transform: translateX(5px);
   background: rgba(255, 255, 255, 0.01);
 }
+
+#news_load_btn {
+  background: none;
+  border: none;
+  color: #cdcdcd;
+  display: block;
+  text-decoration: underline;
+  cursor: pointer;
+}

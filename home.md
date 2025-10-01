@@ -8,7 +8,23 @@ hi. i'm hrishik sai bojnal. i am interested in consciousness. find me at:
 <h2 id="news-heading"><a href="news.md">News:</a></h2>
 
 <table id="homepage_news" class="newstable"></table>
+<button id="news_load_btn" onclick="loadMore()">...load more</button>
 
 <script>
-populateNews("homepage_news", 5)
+let newsDisplayCount = null
+async function initalizeNews() {
+fetch("config.json")
+    .then(res => res.json())
+    .then(config => {
+        newsDisplayCount = config.news.homepageLimit 
+        populateNews("homepage_news", newsDisplayCount)
+    })
+}
+initalizeNews()
+function loadMore() {
+    if(newsDisplayCount) {
+        newsDisplayCount += 5;
+        populateNews("homepage_news", newsDisplayCount)
+    }
+}
 </script>
