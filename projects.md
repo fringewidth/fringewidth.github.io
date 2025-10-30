@@ -78,7 +78,7 @@ _Java, Python, SciPy, JUnit_ | ([Source](https://github.com/fringewidth/jfit2))
 _HTML, CSS, jQuery_
 
 - Wrote a tiny HTML+jQuery script that turns interlinked MD files into a full website. You can find this page's source [here](https://github.com/fringewidth/fringewidth.github.io/blob/main/projects.md), and the full repo [here](https://github.com/fringewidth/fringewidth.github.io).
-- Yes, there are existing solutions that do this, but this one has a data footprint of 150kb and 60% of that is jQuery :)
+- Yes, there are existing solutions that do this, but this one has a data footprint of 150kb and is a proud member of the [512kb Club](512kb.club)🪶.
 - Also hacking together your website from scratch is very fun.
 
 After building grandiose websites, you tend to admire the simplicity of the early internet.
