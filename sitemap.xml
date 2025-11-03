@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://hrishik.me/</loc>
+  </url>
+  <url>
+    <loc>https://hrishik.me/?content=home.md</loc>
+  </url>
+  <url>
+    <loc>https://hrishik.me/?content=projects.md</loc>
+  </url>
+  <url>
+    <loc>https://hrishik.me/?content=publications.md</loc>
+  </url>
+  <url>
+    <loc>https://hrishik.me/?content=news.md</loc>
+  </url>
+</urlset>
