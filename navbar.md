@@ -1,4 +1,4 @@
 - [home](home.md)
 - [projects](projects.md)
-- [papers](papers.md)
+- [publications](publications.md)
 - [news](news.md)
