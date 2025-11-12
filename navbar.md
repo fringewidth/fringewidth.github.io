@@ -1,4 +1,3 @@
 - [home](home.md)
 - [projects](projects.md)
 - [publications](publications.md)
-- [news](news.md)

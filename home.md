@@ -28,9 +28,15 @@ async function initalizeNews() {
     const newsTable = document.getElementById('homepage_news');
     if (newsTable && newsDisplayCount < totalNewsLength) {
         const loadMoreBtn = document.createElement('button');
-        const newsHeading = document.createElement('a');
+        const newsHeading = document.createElement('h3');
+        newsHeading.textContent = "News ";
         newsHeading.href = "news.md";
-        newsHeading.textContent = "News:";
+
+        const seeAll = document.createElement('a');
+        seeAll.href = 'news.md';
+        seeAll.textContent = '(view all)';
+
+        newsHeading.appendChild(seeAll);
 
         loadMoreBtn.id = 'news_load_btn';
         loadMoreBtn.textContent = '...load more';
