@@ -36,6 +36,10 @@
     "headline": "I was invited to give a talk on placement preparation at RVITM, as my subsequent juniors' placement season drew near. I spoke about my learnings and common pitfalls. You can find the slides [here](https://docs.google.com/presentation/d/1EIELdp9pJkHUATWfw0O_eF--eH2MFFZF/edit?usp=sharing&ouid=102196965728428375607&rtpof=true&sd=true), although they're mostly talking points with no detail."
   },
   {
+    "date": "2025-02-07",
+    "headline": "Our research on location anonymization turned into our final year thesis, which you can [read online](https://www.researchgate.net/publication/397740267)."
+  },
+  {
     "date": "2025-01-09",
     "headline": "My team published '[Privacy Preservation of Cluster Integrity on Web-Scraped Hospital Data](https://ieeexplore.ieee.org/document/10958977) at IEEE ICAECT 2025. We proposed a pretty neat way to anonymize geospatial data. I was first author."
   },
