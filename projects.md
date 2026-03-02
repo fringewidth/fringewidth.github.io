@@ -2,7 +2,7 @@ Some of the stuff I built:
 
 ---
 
-#### 🧠 Steer Clear – Unsupervised Search for Interp Features {#projects-steer-clear}
+#### 🛞 Steer Clear – Unsupervised Search for Interp Features {#projects-steer-clear}
 
 _Mech Interp, LLMs, Activation Space_ | ([Source](https://github.com/fringewidth/steer-clear) | [Read writeup](steer-clear.md))
 
