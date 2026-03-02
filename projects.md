@@ -2,6 +2,24 @@ Some of the stuff I built:
 
 ---
 
+#### 🧠 Steer Clear – Unsupervised Search for Interp Features {#projects-steer-clear}
+
+_Mech Interp, LLMs, Activation Space_ | ([Source](https://github.com/fringewidth/steer-clear) | [Read writeup](steer-clear.md))
+
+I created an unsupervised method to discover interesting, steerable behaviours directly from the activation space of LLMs. I trained 20 LoRAs on Qwen1.5-14b-instruct, out of which five correspond to linear, steerable, and interpretable vectors. I used a modified LLM-as-a-judge method to strictly quantify how well a LoRA corresponds to the extracted linear vector.
+
+[Read the full writeup about this experiment](steer-clear.md).
+
+---
+
+#### 🧠 Neural Network in C {#projects-nn-in-c}
+
+_C, Machine Learning, Math_ | ([Source](https://github.com/fringewidth/neural-network-in-c))
+
+Including autograd this time. Because [NumPy wasn't low-level enough](https://github.com/fringewidth/numpy-complete).
+
+---
+
 #### ☸️ Ved – Full Stack Mock Website {#projects-ved}
 
 _Postgres, React, CSS, Mistral API_ | ([Source](https://github.com/fringewidth/ved) | [Live](https://ved-one.vercel.app))
