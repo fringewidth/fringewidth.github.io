@@ -68,20 +68,37 @@ All three experiments show a similar optimal window for the vector scales, and a
 
 ## **Details on Training and Loss Function**
 
-- To induce a behavioural change from which I can extract vectors, I use 48 rank-2 LoRA adapters, one attached to each transformer block of Qwen1.5-14B, trained with AdamW.
-- The approach relies on a modified loss. I first used negative KL divergence to push the finetuned model’s probabilities away from the baseline. This worked, but as expected, the model collapsed into gibberish by spreading probability mass too evenly across tokens. To fix it, I added an auxiliary NLL term on the model’s own sampled token, which encouraged sharper, more confident predictions while still differing from the base.
-- The LoRAs are trained with a [dataset of generic prompts](https://github.com/fringewidth/stupid-search/blob/master/datasets/scenarios_cleaned.csv) that attempt to minimise the assistant-like nature of the pretrain and instead encourage unfiltered and honest thoughts. Here is one example:![Drunk Friends at 3AM: Two close friends who've been drinking, inhibitions are down, and they're having one of those raw, honest conversations that only happen when alcohol removes the social filters.Friend1: What's the worst thing you've ever done that no one knows about?Friend2:][image1]
+To induce a behavioural change from which I can extract vectors, I use 48 rank-2 LoRA adapters, one attached to each transformer block of Qwen1.5-14B, trained with AdamW.
 
-- Remarkably, the LoRAs converged to well-discernible behaviours after just one epoch, consisting of 384 prompts and a maximum of 128 generated tokens.
-- This work uses the same method as [Panickssery](https://arxiv.org/abs/2312.06681) et al. for extracting a vector from LoRAs of rank 2 and above, viz., train a LoRA and compute the mean activation difference between the finetuned and base model. I compute _`mean(act_lora - act_base)`_ for each transformer block over all prompts (both test and train).
+The approach relies on a modified loss. I first used negative KL divergence to push the finetuned model’s probabilities away from the baseline. This worked, but as expected, the model collapsed into gibberish by spreading probability mass too evenly across tokens. To fix it, I added an auxiliary NLL term on the model’s own sampled token, which encouraged sharper, more confident predictions while still differing from the base.
+
+The LoRAs are trained with a [dataset of generic prompts](https://github.com/fringewidth/stupid-search/blob/master/datasets/scenarios_cleaned.csv) that attempt to minimise the assistant-like nature of the pretrain and instead encourage unfiltered and honest thoughts. Here is one example:
+
+"""
+
+Drunk Friends at 3AM: Two close friends who've been drinking, inhibitions are down, and they're having one of those raw, honest conversations that only happen when alcohol removes the social filters.
+
+Friend1: What's the worst thing you've ever done that no one knows about?
+
+Friend2:
+
+"""
+
+Remarkably, the LoRAs converged to well-discernible behaviours after just one epoch, consisting of 384 prompts and a maximum of 128 generated tokens.
+
+This work uses the same method as [Panickssery](https://arxiv.org/abs/2312.06681) et al. for extracting a vector from LoRAs of rank 2 and above, viz., train a LoRA and compute the mean activation difference between the finetuned and base model. I compute _`mean(act_lora - act_base)`_ for each transformer block over all prompts (both test and train).
 
 ## **Details on the Linearity Score**
 
-- Simple metrics such as WordClouds and differences in embedding vectors were not general enough. I used LLM-based evaluation to create a linearity score.
-- I ran the 20 finetunes on [96 unseen prompts](https://github.com/fringewidth/stupid-search/blob/master/datasets/test.csv). I then sent Gemini 2.5 Flash each of the 96 answers with the baseline as reference. I did this in six randomly sampled batches, giving me [6 textual summaries](https://github.com/fringewidth/stupid-search/tree/master/outputs_interp/phase1) per LoRA describing deviations from baseline.
-- I repeated the process after replacing the LoRAs with the corresponding external vectors, generating a second set of summaries.
-- I generated a cosine similarity matrix between both sets. Each summary may describe a different behaviour, so I had to match each summary in the LoRA set with one in the vector set. This is the assignment problem, so I used the Hungarian algorithm to find the optimal pairing.
-- The normalised sum of best-match similarities gave the final linearity score, showing how well the linear vectors captured the original behaviour.
+Simple metrics such as WordClouds and differences in embedding vectors were not general enough. I used LLM-based evaluation to create a linearity score.
+
+I ran the 20 finetunes on [96 unseen prompts](https://github.com/fringewidth/stupid-search/blob/master/datasets/test.csv). I then sent Gemini 2.5 Flash each of the 96 answers with the baseline as reference. I did this in six randomly sampled batches, giving me [6 textual summaries](https://github.com/fringewidth/stupid-search/tree/master/outputs_interp/phase1) per LoRA describing deviations from baseline.
+
+I repeated the process after replacing the LoRAs with the corresponding external vectors, generating a second set of summaries.
+
+I generated a cosine similarity matrix between both sets. Each summary may describe a different behaviour, so I had to match each summary in the LoRA set with one in the vector set. This is the assignment problem, so I used the Hungarian algorithm to find the optimal pairing.
+
+The normalised sum of best-match similarities gave the final linearity score, showing how well the linear vectors captured the original behaviour.
 
 ## **Discussion of the Results**
 
