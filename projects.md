@@ -4,7 +4,7 @@ Some of the stuff I built:
 
 #### 🛞 Steer Clear – Unsupervised Search for Interp Features {#projects-steer-clear}
 
-_Mech Interp, LLMs, Activation Space_ | ([Source](https://github.com/fringewidth/steer-clear) | [Read writeup](https://www.lesswrong.com/posts/T64JQFZ5NwSzx4mJu/unsupervised-discovery-of-steering-vectors)
+_Mech Interp, LLMs, Activation Space_ | ([Source](https://github.com/fringewidth/steer-clear) | [Read writeup](https://www.lesswrong.com/posts/T64JQFZ5NwSzx4mJu/unsupervised-discovery-of-steering-vectors))
 
 I created an unsupervised method to discover interesting, steerable behaviours directly from the activation space of LLMs. I trained 20 LoRAs on Qwen1.5-14b-instruct, out of which five correspond to linear, steerable, and interpretable vectors. I used a modified LLM-as-a-judge method to strictly quantify how well a LoRA corresponds to the extracted linear vector.
 
