@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fonaligging: definition, pronunciation, and usage</title>
+  <meta name="description" content="fonaligging: definition, pronunciation, etymology, and example usage of this rare English word." />
+  <link rel="canonical" href="https://hrishik.me/fonaligging.html" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #fdfcf8;
+  padding: 0 1.1em 4em;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.site-header {
+  border-bottom: 3px double #333;
+  padding: 0.75em 0 0.5em;
+  margin-bottom: 1.5em;
+}
+.site-name {
+  font-size: 0.78em;
+  font-weight: bold;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #1a1a1a;
+  display: block;
+  margin-bottom: 0.15em;
+}
+.site-tagline {
+  font-size: 0.72em;
+  color: #888;
+  font-style: italic;
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 0.72em;
+  color: #aaa;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.4em;
+}
+
+/* Above-fold block fills the viewport so definition starts below */
+.above-fold {
+  min-height: 88svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.headword {
+  font-size: 2.4em;
+  font-weight: bold;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.1em;
+}
+
+.pron {
+  font-size: 0.85em;
+  color: #666;
+  margin-bottom: 0.55em;
+}
+
+.pos-line {
+  font-size: 0.82em;
+  margin-bottom: 1.1em;
+  color: #555;
+}
+.pos {
+  font-style: italic;
+  color: #8b0000;
+  font-weight: bold;
+}
+.dot { margin: 0 0.35em; color: #bbb; }
+
+.section-label {
+  font-size: 0.65em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #aaa;
+  display: block;
+  margin-bottom: 0.3em;
+  margin-top: 1.3em;
+}
+
+.etymology {
+  font-size: 0.85em;
+  color: #555;
+  font-style: italic;
+  border-left: 2px solid #d8d0c0;
+  padding-left: 0.75em;
+  margin-bottom: 0;
+}
+.etymology strong { font-style: normal; color: #444; }
+
+.attestation {
+  font-size: 0.8em;
+  color: #777;
+  margin-top: 1em;
+}
+
+.usage-note {
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 1em;
+  border-left: 2px solid #d8d0c0;
+  padding-left: 0.75em;
+}
+
+/* Scroll indicator nudge */
+.scroll-hint {
+  margin-top: auto;
+  padding: 1.5em 0 0.5em;
+  text-align: center;
+  font-size: 0.72em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #bbb;
+}
+.scroll-hint::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 2em;
+  background: #ccc;
+  margin: 0.5em auto 0;
+}
+
+/* Definition section */
+.definition-section {
+  padding-top: 1.8em;
+  border-top: 1px solid #e5ddd0;
+}
+
+.senses { list-style: none; margin-bottom: 1.2em; }
+.senses li {
+  display: flex;
+  gap: 0.6em;
+  margin-bottom: 0.75em;
+  font-size: 0.95em;
+}
+.sense-num {
+  min-width: 1.3em;
+  font-weight: bold;
+  color: #8b0000;
+  flex-shrink: 0;
+}
+
+.example-block {
+  margin: 1em 0 0 1.9em;
+  padding-left: 0.8em;
+  border-left: 2px solid #ccc;
+  font-style: italic;
+  font-size: 0.85em;
+  color: #555;
+}
+.example-label {
+  font-style: normal;
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #aaa;
+  display: block;
+  margin-bottom: 0.15em;
+}
+
+hr { border: none; border-top: 1px solid #e5ddd0; margin: 1.8em 0; }
+
+.see-also { font-size: 0.8em; color: #888; }
+.see-also a { color: #8b0000; text-decoration: none; }
+
+/* Surprise modal */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5em;
+}
+.modal-backdrop.visible {
+  display: flex;
+}
+.modal {
+  background: #fdfcf8;
+  border: 1px solid #d8d0c0;
+  border-top: 3px solid #8b0000;
+  padding: 2em 1.8em 1.6em;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+}
+.modal p {
+  font-size: 1em;
+  color: #1a1a1a;
+  margin-bottom: 1.4em;
+  line-height: 1.5;
+}
+.modal-btn {
+  display: inline-block;
+  background: #8b0000;
+  color: #fdfcf8;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.9em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: none;
+  padding: 0.7em 2em;
+  cursor: pointer;
+  text-decoration: none;
+  width: 100%;
+}
+
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "DefinedTerm",
+    "name": "fonaligging",
+    "inDefinedTermSet": "https://hrishik.me/lexicon.html",
+    "url": "https://hrishik.me/fonaligging.html"
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-name" href="lexicon.html">The Uncommon Lexicon</a>
+    <span class="site-tagline">a reference of rare and dialectal English</span>
+  </header>
+
+  <a class="back-link" href="lexicon.html">&#8592; word index</a>
+
+  <main>
+    <div class="above-fold">
+      <div class="headword">fonaligging</div>
+      <div class="pron">/ ˌfɒn.ə.ˈlɪɡ.ɪŋ /</div>
+      <div class="pos-line">
+        <span class="pos">present participle</span>
+        <span class="dot">·</span>
+        <span>dialectal, chiefly northern English</span>
+      </div>
+
+      <span class="section-label">Etymology</span>
+      <p class="etymology">
+        <strong>Origin obscure;</strong> possibly from dialectal <em>fonalig</em> (to paw at something idly, recorded in West Riding glossaries c. 1840), itself of uncertain derivation. Compare Scottish <em>fankling</em> (to entangle without purpose) and Northumbrian <em>fondle</em> in its earlier, non-affectionate sense of handling loosely.
+      </p>
+
+      <span class="section-label">First attested</span>
+      <p class="attestation">West Riding dialect glossaries, c. 1840, with the gloss "to handle without purpose." Possibly older in spoken use. Not recorded in literary sources; the word appears to have remained confined to informal speech.</p>
+
+      <span class="section-label">Usage note</span>
+      <p class="usage-note">Almost exclusively dialectal; rarely appears outside speech or informal writing. The word carries no strong evaluative charge: fonaligging is observed rather than judged. It names the action precisely without implying restlessness or anxiety.</p>
+
+      <div class="scroll-hint">definition</div>
+    </div>
+
+    <div class="definition-section">
+      <ol class="senses" data-nosnippet>
+        <li>
+          <span class="sense-num">1</span>
+          <span>To handle or fiddle with something absentmindedly, without intention or purpose. Fonaligging is distinguished from restlessness by its calm; there is no urgency in the motion, only idle, repeated contact.</span>
+        </li>
+        <li>
+          <span class="sense-num">2</span>
+          <span><em>(noun use, rare)</em> The act or habit of such handling: <em>"the fonaligging of a pen cap during long meetings."</em></span>
+        </li>
+      </ol>
+      <div class="example-block" data-nosnippet>
+        <span class="example-label">in use</span>
+        "He spent the whole call fonaligging with the corner of a sticky note, folding and unfolding it."
+      </div>
+    </div>
+
+    <hr />
+    <p class="see-also">See also: <a href="lexicon.html">word index</a></p>
+  </main>
+
+  <div class="modal-backdrop" id="modal">
+    <div class="modal">
+      <p>hi Ojas, I have a surprise for you</p>
+      <a class="modal-btn" href="GAME_URL_PLACEHOLDER">View</a>
+    </div>
+  </div>
+
+  <script>
+    setTimeout(function() {
+      document.getElementById('modal').classList.add('visible')
+    }, 2000)
+  </script>
+</body>
+</html>
