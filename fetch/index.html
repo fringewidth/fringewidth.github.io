@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#7ec8ff">
+<meta name="theme-color" content="#246ddb">
 <title>Fetch</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,6 +25,8 @@
     image-rendering: pixelated;
     image-rendering: crisp-edges;
   }
+
+  /* --- HUD --- */
   #hud {
     position: fixed;
     top: env(safe-area-inset-top, 0);
@@ -41,7 +43,7 @@
     font-size: clamp(14px, 4.5vw, 20px);
     letter-spacing: 1px;
   }
-  #score { white-space: pre; }
+  #score { white-space: pre; pointer-events: auto; }
   #themeBtn {
     pointer-events: auto;
     display: none;
@@ -92,6 +94,8 @@
     75%  { opacity: 1; }
     100% { opacity: 0; transform: translateY(-14px); }
   }
+
+  /* --- speech bubble popup --- */
   #backdrop {
     position: fixed;
     inset: 0;
@@ -114,14 +118,12 @@
     z-index: 11;
     text-align: center;
   }
-  /* speech bubble tail pointing down-left toward the dog */
+  /* tail pointing down-left toward the dog */
   #bubble::after {
     content: "";
     position: absolute;
     left: 18%;
     bottom: -18px;
-    width: 0;
-    height: 0;
     border-left: 14px solid transparent;
     border-right: 14px solid transparent;
     border-top: 18px solid #f2f2f7;
@@ -131,8 +133,6 @@
     position: absolute;
     left: calc(18% + 4px);
     bottom: -10px;
-    width: 0;
-    height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 14px solid #14141c;
@@ -174,27 +174,24 @@
 <div id="bubble">
   <div id="bubbleText"></div>
   <img id="bubbleArt" alt="">
-  <div id="bubbleTap">TAP TO CONTINUE</div>
+  <div id="bubbleTap">TAP TO CLOSE</div>
 </div>
 
 <script>
 "use strict";
 
 /* ============================================================
- *  EVERYTHING YOU'LL WANT TO EDIT IS IN THIS TOP SECTION.
+ * 1. CONFIG - everything you'll want to edit lives here.
  * ============================================================ */
 
 /* ---- MESSAGES ----------------------------------------------
  * Shown one per fetch (in order) once the translate feature is
- * unlocked. Add / remove / reorder freely; the game adapts to
- * any count. `art` is an optional URL to a pixel-art image
- * shown below the text (leave null for text only).
- * `\n` inside text makes a line break.
- *
- * A long message can span several bubble pages: use `pages`
- * instead of `text`/`art`. One fetch shows all its pages in a
- * row - each tap turns the page, and every page can carry its
- * own pixel art (or none).
+ * unlocked. Add / remove / reorder freely. `art` is an optional
+ * URL to a pixel-art image shown below the text. `\n` breaks a
+ * line. A long message can span several bubble pages: use
+ * `pages` instead of `text`/`art` - one fetch shows the pages
+ * in a row, each tap turns the page, and every page can carry
+ * its own art (or none).
  */
 const MESSAGES = [
   { text: "woof! you unlocked my voice!\n(placeholder message 1 - edit me)", art: null },
@@ -212,9 +209,9 @@ const MESSAGES = [
 /* ---- GAME TUNING ------------------------------------------- */
 const CONFIG = {
   POINTS_PER_FETCH: 5,
-  TRANSLATE_UNLOCK_AT: 10,   // score needed to unlock the translate feature
-  // game-pixels per second along the direction of travel, per direction.
-  // tune each to match the sprite's walk cycle (together with its fps).
+  TRANSLATE_UNLOCK_AT: 10,  // score that unlocks the translate feature
+  // game-px per second along the direction of travel; tune each
+  // against the matching sprite's walk cycle (with its fps)
   DOG_SPEED: { N: 58, NE: 58, S: 58, SW: 58 },
   STICK_FLIGHT_MS: 700,
   PICKUP_PAUSE_MS: 450,
@@ -222,53 +219,44 @@ const CONFIG = {
 };
 
 /* ---- SPRITES ------------------------------------------------
- * Set `src` to a PNG path or URL (CDN is fine); null uses a
- * built-in placeholder. Sheets can be horizontal strips OR
- * grids: `frames` is the total frame count, `cols` is frames
- * per row (defaults to all frames in one row).
- * Every sprite is resampled once at load (nearest-neighbor) so
- * a frame stands `size` game-px tall - the world is 160px wide,
- * so size 32 covers a fifth of the screen. Omit `size` to keep
- * native pixels. `fps` is the animation speed.
+ * `src`: PNG path or URL; null (or a failed load) falls back to
+ *   a built-in placeholder.
+ * Sheets may be horizontal strips or grids: `frames` is the
+ *   total count, `cols` is frames per row (default: one row).
+ * `size`: drawn height in game-px (the world is 160 wide, so
+ *   32 covers a fifth of the screen). Omit to keep native size.
+ * `feet`: transparent SOURCE px between the frame's bottom edge
+ *   and the lowest paw pixel - anchors feet to the ground.
+ * `detail: 2`: renders on a grid twice as fine as the world
+ *   (same on-screen size, double the pixel detail).
  *
- * Directions: runN = fetching straight up, runNE = fetching
- * up-right, runS / runSW = returning (stick in mouth, baked
- * into the art - the game hides the loose stick then).
+ * Directions: runN fetches straight up, runNE up-right;
+ * runS / runSW return with the stick baked into the art, so the
+ * game hides the loose stick while the dog carries it.
  */
 const SPRITES = {
-  // `feet` = transparent px between the frame's bottom edge and
-  // the lowest paw pixel (in SOURCE px) - anchors feet to the
-  // ground so the dog stands on its shadow. Measured per sheet.
-  // `detail: 2` renders the sprite on a grid twice as fine as
-  // the world (same on-screen size, double the pixel detail).
-  idle:  { src: "assets/dog_idle.png",      frames: 16, cols: 4, fps: 8,  size: 32, feet: 12,  detail: 2 },
-  runN:  { src: "assets/dog_north.png",     frames: 5,  cols: 5, fps: 10, size: 32, feet: 15,  detail: 2 },
-  runNE: { src: "assets/dog_northeast.png", frames: 4,  cols: 2, fps: 10, size: 32, feet: 8,   detail: 2 },
-  runS:  { src: "assets/dog_south.png",     frames: 5,  cols: 5, fps: 10, size: 32, feet: 25,  detail: 2 },
-  runSW: { src: "assets/dog_southwest.png", frames: 4,  cols: 2, fps: 10, size: 32, feet: 28,  detail: 2 },
-  stick: { src: "assets/stick.png",         frames: 1,  fps: 1,  size: 10, feet: 135 },
-  sun:   { src: null, frames: 1, fps: 1 },
-  moon:  { src: null, frames: 1, fps: 1 },
-  cloud: { src: null, frames: 1, fps: 1 },
+  idle:  { src: "assets/dog_idle.png",      frames: 16, cols: 4, fps: 8,  size: 32, feet: 12, detail: 2 },
+  runN:  { src: "assets/dog_north.png",     frames: 5,  cols: 5, fps: 10, size: 32, feet: 15, detail: 2 },
+  runNE: { src: "assets/dog_northeast.png", frames: 4,  cols: 2, fps: 10, size: 32, feet: 8,  detail: 2 },
+  runS:  { src: "assets/dog_south.png",     frames: 5,  cols: 5, fps: 10, size: 32, feet: 25, detail: 2 },
+  runSW: { src: "assets/dog_southwest.png", frames: 4,  cols: 2, fps: 10, size: 32, feet: 28, detail: 2 },
+  stick: { src: "assets/stick.png",         frames: 1,  size: 10, feet: 135 },
+  sun:   { src: null },
+  moon:  { src: null },
+  cloud: { src: null },
 };
 
 /* ---- SKY THEMES ---------------------------------------------
- * The sky is drawn as discrete color bands with dithered seams
- * (retro-style) and is generated fresh on every load: sun/moon
- * position jitters, clouds get random shapes, sizes, positions
- * and drift speeds, stars scatter differently each night.
- *
  * All colors snap to the Sega Mega Drive palette (9-bit RGB,
  * 8 levels per channel) - edit freely, they get quantized.
  * `sky` is EXACTLY the flat bands drawn top to bottom: 3-4
- * hand-shaded tones of a single hue, no gradient in between.
- * `body` is the sprite hanging in the sky; `bodyPos` is its
- * base position as fractions of (width, sky height), drawn at
- * uniform scale, never squished. `glow` paints halo rings
- * behind it, outermost color first (null for none).
- * Clouds are lit by the sun/moon: `cloudLit` / `cloudShade`
- * are 4-step ramps indexed by distance from the light -
- * index 0 colors the nearest clouds, index 3 the farthest.
+ *   hand-shaded tones of one hue, dithered at the seams.
+ * `body` is the sprite hanging in the sky; `bodyPos` its base
+ *   position as fractions of (width, sky height). `glow` paints
+ *   halo rings behind it, outermost color first (null = none).
+ * Clouds are lit by the sun/moon: `cloudLit` / `cloudShade` are
+ *   4-step ramps indexed by distance from the light (0 nearest).
+ * `shadowAlpha` is the strength of cast shadows on the ground.
  */
 const THEMES = {
   day: {
@@ -301,13 +289,29 @@ const THEMES = {
 };
 const THEME_ORDER = ["day", "sunset", "night"];
 
-/* Sega Mega Drive palette: 9-bit RGB, 8 levels per channel.
- * Every procedural color in the game passes through q(). */
+/* ---- SKY GENERATION (randomized per load) ------------------- */
+const SKY = {
+  CLOUDS_MIN: 3, CLOUDS_MAX: 5,
+  DRIFT_MAX: 2.0,       // max cloud drift, game-px per second
+  STARS_MIN: 30, STARS_MAX: 60,
+  SUN_JITTER: 0.09,     // random sun/moon offset per load (fraction)
+};
+
+/* ============================================================
+ * 2. PALETTE - Mega Drive quantization for procedural colors.
+ * ============================================================ */
+
 const MD_LEVELS = [0, 36, 73, 109, 146, 182, 219, 255];
+
+function hexRGB(h) {
+  return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+}
+
 function q(hex) {
   const c = hexRGB(hex).map((v) => MD_LEVELS[Math.round(v / 255 * 7)]);
   return "#" + c.map((v) => v.toString(16).padStart(2, "0")).join("");
 }
+
 for (const t of Object.values(THEMES)) {
   t.sky = t.sky.map(q);
   t.ground = q(t.ground);
@@ -318,186 +322,40 @@ for (const t of Object.values(THEMES)) {
   t.cloudShade = t.cloudShade.map(q);
 }
 
-/* ---- SKY GENERATION ----------------------------------------- */
-const SKY = {
-  CLOUDS_MIN: 3, CLOUDS_MAX: 5,
-  DRIFT_MAX: 2.0,       // max cloud drift, game-px per second
-  STARS_MIN: 30, STARS_MAX: 60,
-  SUN_JITTER: 0.09,     // random sun/moon offset per load (fraction)
-};
-
 /* ============================================================
- *  GAME CODE BELOW - shouldn't need edits for content changes.
+ * 3. CANVAS & LAYOUT
  * ============================================================ */
+
+const GW = 160;   // world width in game pixels
+const RES = 2;    // canvas supersample; sprites with `detail: 2`
+                  // render on a grid twice as fine as the world
+let GH = 284;     // world height, follows the screen's aspect
+let horizonY = 142;
+let homeY = 272;            // dog's home = bottom-left corner
+const HOME_X = 20;
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
-const scoreEl = document.getElementById("score");
-const themeBtn = document.getElementById("themeBtn");
-const hintEl = document.getElementById("hint");
-const toastEl = document.getElementById("toast");
-const backdropEl = document.getElementById("backdrop");
-const bubbleEl = document.getElementById("bubble");
-const bubbleTextEl = document.getElementById("bubbleText");
-const bubbleArtEl = document.getElementById("bubbleArt");
-
-/* ---- persistent state ---- */
-let save = { score: 0, msgIndex: 0, theme: "day" };
-try {
-  const raw = localStorage.getItem(CONFIG.SAVE_KEY);
-  if (raw) save = Object.assign(save, JSON.parse(raw));
-} catch (e) { /* private mode etc - play without saving */ }
-function persist() {
-  try { localStorage.setItem(CONFIG.SAVE_KEY, JSON.stringify(save)); } catch (e) {}
-}
-
-const translateUnlocked = () => save.score >= CONFIG.TRANSLATE_UNLOCK_AT;
-const skyUnlocked = () => save.msgIndex >= MESSAGES.length && translateUnlocked();
-
-/* ---- layout (low-res internal canvas, scaled by CSS) ---- */
-const GW = 160;               // world width in game pixels
-const RES = 2;                // canvas supersample: sprites with `detail: 2`
-                              // render on a grid twice as fine as the world
-let GH = 284;                 // world height, follows screen aspect
-let horizonY = 96;
-const HOME_X = 20;   // dog home, bottom-left; keeps the 2x sprite fully on-screen
-let homeY = 260;
 
 function resize() {
   const aspect = window.innerHeight / window.innerWidth;
   GH = Math.max(200, Math.min(420, Math.round(GW * aspect)));
   canvas.width = GW * RES;
   canvas.height = GH * RES;
-  horizonY = Math.round(GH * 0.50);
+  horizonY = Math.round(GH * 0.50);   // 50% sky, 50% grass
   homeY = GH - 12;
-  ctx.setTransform(RES, 0, 0, RES, 0, 0); // draw in world units
+  ctx.setTransform(RES, 0, 0, RES, 0, 0);  // draw in world units
   ctx.imageSmoothingEnabled = false;
-  if (dog && dog.state === "idle") { dog.x = HOME_X; dog.y = homeY; }
-  if (typeof scene !== "undefined") { regenScene(); rebuildSky(); }
+  if (dog.state === "idle") { dog.x = HOME_X; dog.y = homeY; }
+  regenScene();
+  rebuildSky();
 }
 
-/* ---- per-load random scenery ---- */
-const scene = { clouds: [], stars: [], tufts: [], jx: 0, jy: 0 };
-let skyCanvas = null;
+/* ============================================================
+ * 4. ASSETS - placeholders, loading, sheet normalization.
+ * ============================================================ */
 
-function rnd(a, b) { return a + Math.random() * (b - a); }
-
-function regenScene() {
-  scene.jx = rnd(-SKY.SUN_JITTER, SKY.SUN_JITTER);
-  scene.jy = rnd(-SKY.SUN_JITTER * 0.7, SKY.SUN_JITTER);
-  scene.stars = [];
-  const ns = Math.round(rnd(SKY.STARS_MIN, SKY.STARS_MAX));
-  for (let i = 0; i < ns; i++) {
-    scene.stars.push([Math.random(), Math.random(), Math.random() < 0.2 ? 2 : 1]);
-  }
-  scene.tufts = [];
-  for (let i = 0; i < 34; i++) scene.tufts.push([Math.random(), Math.random()]);
-  scene.clouds = [];
-  const nc = Math.round(rnd(SKY.CLOUDS_MIN, SKY.CLOUDS_MAX));
-  for (let i = 0; i < nc; i++) {
-    scene.clouds.push({
-      x: Math.random() * GW,
-      fy: rnd(0.08, 0.70),
-      fw: rnd(0.18, 0.40),
-      fh: rnd(0.07, 0.15),
-      drift: rnd(0.4, SKY.DRIFT_MAX) * (Math.random() < 0.5 ? -1 : 1),
-      sil: null,      // silhouette canvas, made lazily
-      bucket: -1,     // light-distance bucket of current tint
-      tinted: null,
-    });
-  }
-}
-
-/* random blobby cloud silhouette (used when no cloud art is set) */
-function genCloudSil() {
-  const w = Math.round(rnd(22, 40)), h = Math.round(rnd(10, 16));
-  const c = makeCanvas(w, h), g = c.getContext("2d");
-  g.fillStyle = "#fff";
-  const base = Math.round(h * 0.5);
-  g.fillRect(2, base, w - 4, h - base - 1);
-  const bumps = 3 + Math.floor(Math.random() * 3);
-  for (let i = 0; i < bumps; i++) {
-    const bw = Math.round(rnd(4, w * 0.4));
-    const bx = Math.round(rnd(1, Math.max(2, w - bw - 1)));
-    const bh = Math.round(rnd(2, base));
-    g.fillRect(bx, base - bh, bw, bh + 1);
-  }
-  g.fillRect(0, base + 1, 2, Math.max(1, h - base - 3));
-  g.fillRect(w - 2, base + 1, 2, Math.max(1, h - base - 3));
-  return c;
-}
-
-function sunPos(th) {
-  const fx = Math.min(0.90, Math.max(0.08, th.bodyPos[0] + scene.jx));
-  const fy = Math.min(0.85, Math.max(0.12, th.bodyPos[1] + scene.jy));
-  return [fx * GW, fy * horizonY];
-}
-
-function hexRGB(h) {
-  return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
-}
-
-/* colorize a cloud silhouette: lit on top, shaded underside */
-function tintCloud(sil, lit, shade) {
-  const c = makeCanvas(sil.width, sil.height);
-  const g = c.getContext("2d");
-  g.drawImage(sil, 0, 0);
-  g.globalCompositeOperation = "source-atop";
-  g.fillStyle = lit;
-  g.fillRect(0, 0, c.width, c.height);
-  g.fillStyle = shade;
-  g.fillRect(0, Math.round(c.height * 0.55), c.width, Math.ceil(c.height * 0.45));
-  return c;
-}
-
-/* pre-render the static sky: bands, dither, stars, halo, sun/moon */
-function rebuildSky() {
-  const th = THEMES[save.theme] || THEMES.day;
-  if (!ART[th.body]) return;   // sprites not loaded yet
-  skyCanvas = makeCanvas(GW, horizonY);
-  const g = skyCanvas.getContext("2d");
-  // the theme's shades ARE the bands - flat fills, no blending
-  const cols = th.sky;
-  const B = cols.length;
-  const bandH = horizonY / B;
-  for (let b = 0; b < B; b++) {
-    g.fillStyle = cols[b];
-    g.fillRect(0, Math.round(b * bandH), GW, Math.ceil(bandH) + 1);
-  }
-  // 2x2 checker dithering along each band seam
-  for (let b = 1; b < B; b++) {
-    const y = Math.round(b * bandH);
-    g.fillStyle = cols[b];
-    for (let x = 0; x < GW; x += 4) g.fillRect(x, y - 2, 2, 2);
-    g.fillStyle = cols[b - 1];
-    for (let x = 2; x < GW; x += 4) g.fillRect(x, y, 2, 2);
-  }
-  if (th.stars) {
-    g.fillStyle = q("#d8d8e8");
-    for (const s of scene.stars) {
-      g.fillRect(Math.round(s[0] * (GW - 2)), Math.round(s[1] * (horizonY - 10)), s[2], s[2]);
-    }
-  }
-  const [sx, sy] = sunPos(th);
-  if (th.glow) {
-    for (let i = 0; i < th.glow.length; i++) {
-      g.fillStyle = th.glow[i];
-      g.beginPath();
-      g.arc(Math.round(sx), Math.round(sy), 7 + (th.glow.length - i) * 5, 0, Math.PI * 2);
-      g.fill();
-    }
-  }
-  const body = ART[th.body];
-  const bd = body.detail || 1;
-  g.drawImage(body.img, 0, 0, body.fw, body.fh,
-    Math.round(sx - body.fw / bd / 2),
-    Math.round(sy - body.fh / bd / 2),
-    body.fw / bd, body.fh / bd);
-}
-
-/* ---- placeholder sprite art (used until real src is set) ---- */
-const PAL = { out: "#33210f", body: "#a5713f", dark: "#7c5026", belly: "#d9b98a", stick: "#8a5a2b", stickD: "#6b431f" };
-for (const k in PAL) PAL[k] = q(PAL[k]);
+const ART = {}; // key -> { img (strip), frames, fps, detail, fw, fh, pad, shadow }
 
 function makeCanvas(w, h) {
   const c = document.createElement("canvas");
@@ -505,89 +363,76 @@ function makeCanvas(w, h) {
   return c;
 }
 
-function drawSideDogFrame(g, ox, f, withStick, facingLeft) {
-  // draws one 22x16 frame of a side-view dog facing right; flip handled by caller
-  g.save();
-  if (facingLeft) { g.translate(ox + 22, 0); g.scale(-1, 1); }
-  else { g.translate(ox, 0); }
-  g.fillStyle = PAL.body;
-  g.fillRect(3, 6, 10, 5);          // body
-  g.fillRect(12, 3, 5, 5);          // head
-  g.fillStyle = PAL.dark;
-  g.fillRect(12, 1, 2, 3);          // ear
-  g.fillRect(16, 5, 2, 2);          // snout
-  g.fillRect(1, 5 + (f ? 1 : 0), 2, 2); // tail (bobs)
-  g.fillStyle = PAL.out;
-  g.fillRect(14, 4, 1, 1);          // eye
-  // legs alternate between frames
-  g.fillStyle = PAL.dark;
-  if (f === 0) {
-    g.fillRect(4, 11, 2, 4);
-    g.fillRect(10, 11, 2, 4);
-  } else {
-    g.fillRect(3, 11, 2, 4);
-    g.fillRect(11, 11, 2, 4);
-  }
-  if (withStick) {
-    g.fillStyle = PAL.stick;
-    g.fillRect(15, 7, 7, 2);
-    g.fillStyle = PAL.stickD;
-    g.fillRect(20, 6, 2, 2);
-  }
-  g.restore();
+/* --- placeholder art, used until real sprites load --- */
+const PAL = {};
+{
+  const raw = { out: "#33210f", body: "#a5713f", dark: "#7c5026", belly: "#d9b98a", stick: "#8a5a2b", stickD: "#6b431f" };
+  for (const k in raw) PAL[k] = q(raw[k]);
 }
 
-function phSideDog(withStick, facingLeft) {
+function phDogSide(withStick, facingLeft) {
   const c = makeCanvas(44, 16);
   const g = c.getContext("2d");
-  drawSideDogFrame(g, 0, 0, withStick, facingLeft);
-  drawSideDogFrame(g, 22, 1, withStick, facingLeft);
+  for (let f = 0; f < 2; f++) {
+    g.save();
+    if (facingLeft) { g.translate(f * 22 + 22, 0); g.scale(-1, 1); }
+    else { g.translate(f * 22, 0); }
+    g.fillStyle = PAL.body;
+    g.fillRect(3, 6, 10, 5);              // body
+    g.fillRect(12, 3, 5, 5);              // head
+    g.fillStyle = PAL.dark;
+    g.fillRect(12, 1, 2, 3);              // ear
+    g.fillRect(16, 5, 2, 2);              // snout
+    g.fillRect(1, 5 + f, 2, 2);           // tail bobs
+    g.fillStyle = PAL.out;
+    g.fillRect(14, 4, 1, 1);              // eye
+    g.fillStyle = PAL.dark;
+    if (f === 0) { g.fillRect(4, 11, 2, 4); g.fillRect(10, 11, 2, 4); }
+    else { g.fillRect(3, 11, 2, 4); g.fillRect(11, 11, 2, 4); }
+    if (withStick) {
+      g.fillStyle = PAL.stick;
+      g.fillRect(15, 7, 7, 2);
+      g.fillStyle = PAL.stickD;
+      g.fillRect(20, 6, 2, 2);
+    }
+    g.restore();
+  }
   return c;
 }
 
-function drawVertDogFrame(g, ox, f, front, withStick) {
-  // one 16x16 frame of a dog seen from behind (back) or front
-  g.save();
-  g.translate(ox, 0);
-  g.fillStyle = PAL.body;
-  g.fillRect(5, 6, 6, 6);           // body
-  g.fillRect(4, 1, 8, 6);           // head
-  g.fillStyle = PAL.dark;
-  g.fillRect(3, 0, 2, 3);           // ears
-  g.fillRect(11, 0, 2, 3);
-  // tail wags side to side
-  if (f === 0) g.fillRect(2, 7, 3, 2);
-  else g.fillRect(11, 7, 3, 2);
-  if (front) {
-    g.fillStyle = PAL.out;
-    g.fillRect(6, 3, 1, 1);         // eyes
-    g.fillRect(9, 3, 1, 1);
-    g.fillStyle = PAL.belly;
-    g.fillRect(6, 9, 4, 3);
-  }
-  g.fillStyle = PAL.dark;
-  if (f === 0) {
-    g.fillRect(5, 12, 2, 4);
-    g.fillRect(9, 12, 2, 4);
-  } else {
-    g.fillRect(4, 12, 2, 4);
-    g.fillRect(10, 12, 2, 4);
-  }
-  if (withStick) {
-    g.fillStyle = PAL.stick;
-    g.fillRect(2, 5, 12, 2);
-    g.fillStyle = PAL.stickD;
-    g.fillRect(2, 5, 2, 2);
-    g.fillRect(12, 5, 2, 2);
-  }
-  g.restore();
-}
-
-function phVertDog(front, withStick) {
+function phDogVert(front, withStick) {
   const c = makeCanvas(32, 16);
   const g = c.getContext("2d");
-  drawVertDogFrame(g, 0, 0, front, withStick);
-  drawVertDogFrame(g, 16, 1, front, withStick);
+  for (let f = 0; f < 2; f++) {
+    g.save();
+    g.translate(f * 16, 0);
+    g.fillStyle = PAL.body;
+    g.fillRect(5, 6, 6, 6);               // body
+    g.fillRect(4, 1, 8, 6);               // head
+    g.fillStyle = PAL.dark;
+    g.fillRect(3, 0, 2, 3);               // ears
+    g.fillRect(11, 0, 2, 3);
+    if (f === 0) g.fillRect(2, 7, 3, 2);  // tail wags side to side
+    else g.fillRect(11, 7, 3, 2);
+    if (front) {
+      g.fillStyle = PAL.out;
+      g.fillRect(6, 3, 1, 1);             // eyes
+      g.fillRect(9, 3, 1, 1);
+      g.fillStyle = PAL.belly;
+      g.fillRect(6, 9, 4, 3);
+    }
+    g.fillStyle = PAL.dark;
+    if (f === 0) { g.fillRect(5, 12, 2, 4); g.fillRect(9, 12, 2, 4); }
+    else { g.fillRect(4, 12, 2, 4); g.fillRect(10, 12, 2, 4); }
+    if (withStick) {
+      g.fillStyle = PAL.stick;
+      g.fillRect(2, 5, 12, 2);
+      g.fillStyle = PAL.stickD;
+      g.fillRect(2, 5, 2, 2);
+      g.fillRect(12, 5, 2, 2);
+    }
+    g.restore();
+  }
   return c;
 }
 
@@ -638,33 +483,32 @@ function phCloud() {
   return c;
 }
 
-/* ---- sprite loading ---- */
-const ART = {}; // key -> { img, frames, fps, scale, fw, fh }
+/* each factory returns { img, frames } so the loader can treat
+ * placeholders exactly like real sheets */
+const PLACEHOLDERS = {
+  idle:  () => ({ img: phDogVert(true, false), frames: 2 }),
+  runN:  () => ({ img: phDogVert(false, false), frames: 2 }),
+  runNE: () => ({ img: phDogSide(false, false), frames: 2 }),
+  runS:  () => ({ img: phDogVert(true, true), frames: 2 }),
+  runSW: () => ({ img: phDogSide(true, true), frames: 2 }),
+  stick: () => ({ img: phStick(), frames: 1 }),
+  sun:   () => ({ img: phSun(), frames: 1 }),
+  moon:  () => ({ img: phMoon(), frames: 1 }),
+  cloud: () => ({ img: phCloud(), frames: 1 }),
+};
 
+/* Slice a sheet (strip or grid) into a horizontal strip resampled
+ * once, nearest-neighbor, to its game size - gameplay never touches
+ * the source resolution again. Also bakes the black silhouette
+ * strip used for cast shadows. */
 function loadSprites() {
-  const placeholders = {
-    idle:  () => phVertDog(true, false),
-    runN:  () => phVertDog(false, false),
-    runNE: () => phSideDog(false, false),
-    runS:  () => phVertDog(true, true),
-    runSW: () => phSideDog(true, true),
-    stick: phStick,
-    sun:   phSun,
-    moon:  phMoon,
-    cloud: phCloud,
-  };
-  // placeholders are 2-frame strips for the dog, single images otherwise
-  const PH_FRAMES = { idle: 2, runN: 2, runNE: 2, runS: 2, runSW: 2, stick: 1, sun: 1, moon: 1, cloud: 1 };
   const jobs = Object.keys(SPRITES).map((key) => {
     const spec = SPRITES[key];
     return new Promise((resolve) => {
-      // slice the sheet (strip or grid) and resample each frame
-      // to `size` game-px tall, into one horizontal strip
-      const finish = (img, frames, cols, feetSrc) => {
+      const finish = (img, frames, cols, feetSrc, detail) => {
         const rows = Math.ceil(frames / cols);
         const sfw = Math.floor(img.width / cols);
         const sfh = Math.floor(img.height / rows);
-        const detail = spec.src ? (spec.detail || 1) : 1; // placeholders stay coarse
         const fh = (spec.size || sfh) * detail;
         const fw = Math.max(1, Math.round(sfw * fh / sfh));
         const strip = makeCanvas(fw * frames, fh);
@@ -676,21 +520,23 @@ function loadSprites() {
             f * fw, 0, fw, fh);
         }
         const pad = Math.round((feetSrc || 0) * fh / sfh);
-        // black silhouette copy, projected on the ground as the cast shadow
         const shadow = makeCanvas(strip.width, strip.height);
         const sg = shadow.getContext("2d");
         sg.drawImage(strip, 0, 0);
         sg.globalCompositeOperation = "source-atop";
         sg.fillStyle = "#000";
         sg.fillRect(0, 0, shadow.width, shadow.height);
-        ART[key] = { img: strip, frames, fps: spec.fps, detail, fw, fh, pad, shadow };
+        ART[key] = { img: strip, frames, fps: spec.fps || 1, detail, fw, fh, pad, shadow };
         resolve();
       };
-      const usePlaceholder = () => finish(placeholders[key](), PH_FRAMES[key], PH_FRAMES[key], 0);
+      const usePlaceholder = () => {
+        const ph = PLACEHOLDERS[key]();
+        finish(ph.img, ph.frames, ph.frames, 0, 1); // placeholders stay coarse
+      };
       if (spec.src) {
         const img = new Image();
-        img.onload = () => finish(img, spec.frames, spec.cols || spec.frames, spec.feet);
-        img.onerror = usePlaceholder; // fall back if the asset fails to load
+        img.onload = () => finish(img, spec.frames, spec.cols || spec.frames, spec.feet, spec.detail || 1);
+        img.onerror = usePlaceholder;  // a broken URL never blanks the game
         img.src = spec.src;
       } else {
         usePlaceholder();
@@ -699,6 +545,130 @@ function loadSprites() {
   });
   return Promise.all(jobs);
 }
+
+/* ============================================================
+ * 5. SCENERY - per-load randomness, sky cache, clouds.
+ * ============================================================ */
+
+const scene = { clouds: [], stars: [], tufts: [], jx: 0, jy: 0 };
+let skyCanvas = null;   // pre-rendered sky: bands, stars, halo, sun/moon
+
+function rnd(a, b) { return a + Math.random() * (b - a); }
+
+function regenScene() {
+  scene.jx = rnd(-SKY.SUN_JITTER, SKY.SUN_JITTER);
+  scene.jy = rnd(-SKY.SUN_JITTER * 0.7, SKY.SUN_JITTER);
+  scene.stars = [];
+  const nStars = Math.round(rnd(SKY.STARS_MIN, SKY.STARS_MAX));
+  for (let i = 0; i < nStars; i++) {
+    scene.stars.push([Math.random(), Math.random(), Math.random() < 0.2 ? 2 : 1]);
+  }
+  scene.tufts = [];
+  for (let i = 0; i < 34; i++) scene.tufts.push([Math.random(), Math.random()]);
+  scene.clouds = [];
+  const nClouds = Math.round(rnd(SKY.CLOUDS_MIN, SKY.CLOUDS_MAX));
+  for (let i = 0; i < nClouds; i++) {
+    scene.clouds.push({
+      x: Math.random() * GW,
+      fy: rnd(0.08, 0.70),    // position and size as sky fractions
+      fw: rnd(0.18, 0.40),
+      fh: rnd(0.07, 0.15),
+      drift: rnd(0.4, SKY.DRIFT_MAX) * (Math.random() < 0.5 ? -1 : 1),
+      sil: null,              // silhouette canvas, made lazily
+      bucket: -1,             // light-distance bucket of current tint
+      tinted: null,
+    });
+  }
+}
+
+/* random blobby silhouette (used when no cloud art is set) */
+function genCloudSil() {
+  const w = Math.round(rnd(22, 40)), h = Math.round(rnd(10, 16));
+  const c = makeCanvas(w, h), g = c.getContext("2d");
+  g.fillStyle = "#fff";
+  const base = Math.round(h * 0.5);
+  g.fillRect(2, base, w - 4, h - base - 1);
+  const bumps = 3 + Math.floor(Math.random() * 3);
+  for (let i = 0; i < bumps; i++) {
+    const bw = Math.round(rnd(4, w * 0.4));
+    const bx = Math.round(rnd(1, Math.max(2, w - bw - 1)));
+    const bh = Math.round(rnd(2, base));
+    g.fillRect(bx, base - bh, bw, bh + 1);
+  }
+  g.fillRect(0, base + 1, 2, Math.max(1, h - base - 3));
+  g.fillRect(w - 2, base + 1, 2, Math.max(1, h - base - 3));
+  return c;
+}
+
+function sunPos(th) {
+  const fx = Math.min(0.90, Math.max(0.08, th.bodyPos[0] + scene.jx));
+  const fy = Math.min(0.85, Math.max(0.12, th.bodyPos[1] + scene.jy));
+  return [fx * GW, fy * horizonY];
+}
+
+/* colorize a cloud silhouette: lit on top, shaded underside */
+function tintCloud(sil, lit, shade) {
+  const c = makeCanvas(sil.width, sil.height);
+  const g = c.getContext("2d");
+  g.drawImage(sil, 0, 0);
+  g.globalCompositeOperation = "source-atop";
+  g.fillStyle = lit;
+  g.fillRect(0, 0, c.width, c.height);
+  g.fillStyle = shade;
+  g.fillRect(0, Math.round(c.height * 0.55), c.width, Math.ceil(c.height * 0.45));
+  return c;
+}
+
+/* pre-render the static sky once per theme change / resize */
+function rebuildSky() {
+  const th = THEMES[save.theme] || THEMES.day;
+  if (!ART[th.body]) return;   // sprites not loaded yet
+  skyCanvas = makeCanvas(GW, horizonY);
+  const g = skyCanvas.getContext("2d");
+
+  // the theme's shades ARE the bands - flat fills, no blending
+  const cols = th.sky;
+  const bandH = horizonY / cols.length;
+  for (let b = 0; b < cols.length; b++) {
+    g.fillStyle = cols[b];
+    g.fillRect(0, Math.round(b * bandH), GW, Math.ceil(bandH) + 1);
+  }
+  // 2x2 checker dithering along each band seam
+  for (let b = 1; b < cols.length; b++) {
+    const y = Math.round(b * bandH);
+    g.fillStyle = cols[b];
+    for (let x = 0; x < GW; x += 4) g.fillRect(x, y - 2, 2, 2);
+    g.fillStyle = cols[b - 1];
+    for (let x = 2; x < GW; x += 4) g.fillRect(x, y, 2, 2);
+  }
+
+  if (th.stars) {
+    g.fillStyle = q("#d8d8e8");
+    for (const s of scene.stars) {
+      g.fillRect(Math.round(s[0] * (GW - 2)), Math.round(s[1] * (horizonY - 10)), s[2], s[2]);
+    }
+  }
+
+  // halo rings, then the sun/moon at uniform scale (never squished)
+  const [sx, sy] = sunPos(th);
+  if (th.glow) {
+    for (let i = 0; i < th.glow.length; i++) {
+      g.fillStyle = th.glow[i];
+      g.beginPath();
+      g.arc(Math.round(sx), Math.round(sy), 7 + (th.glow.length - i) * 5, 0, Math.PI * 2);
+      g.fill();
+    }
+  }
+  const body = ART[th.body];
+  const bd = body.detail;
+  g.drawImage(body.img, 0, 0, body.fw, body.fh,
+    Math.round(sx - body.fw / bd / 2), Math.round(sy - body.fh / bd / 2),
+    body.fw / bd, body.fh / bd);
+}
+
+/* ============================================================
+ * 6. RENDERING
+ * ============================================================ */
 
 function frameIndex(a, frame, animT) {
   if (a.frames <= 1) return 0;
@@ -709,12 +679,12 @@ function drawSprite(key, cx, bottomY, frame, animT) {
   const a = ART[key];
   if (!a) return;
   const f = frameIndex(a, frame, animT);
-  const d = a.detail || 1;
+  const d = a.detail;
   const w = a.fw / d;   // world-unit size; detail sprites keep finer pixels
   const h = a.fh / d;
-  const pad = (a.pad || 0) / d;
-  // anchor the lowest content pixel (feet) to bottomY, not the frame edge;
-  // positions snap to the sprite's own (finer) grid
+  const pad = a.pad / d;
+  // anchor the lowest content pixel (feet) to bottomY, snapping
+  // to the sprite's own (finer) grid
   const x = Math.round((cx - w / 2) * d) / d;
   const y = Math.round((bottomY - h + pad) * d) / d;
   ctx.drawImage(a.img, f * a.fw, 0, a.fw, a.fh, x, y, w, h);
@@ -725,18 +695,18 @@ function drawSprite(key, cx, bottomY, frame, animT) {
  * shadow; the shear direction follows the light's x position. */
 function drawCastShadow(key, cx, groundY, frame, animT) {
   const a = ART[key];
-  if (!a || !a.shadow) return;
+  if (!a) return;
   const th = THEMES[save.theme] || THEMES.day;
   const [lx, ly] = sunPos(th);
-  const e = Math.min(1, Math.max(0, ly / horizonY)); // 0 high sun, 1 at horizon
+  const e = Math.min(1, Math.max(0, ly / horizonY)); // 0 high light, 1 at horizon
   const dir = Math.max(-1.6, Math.min(1.6, (cx - lx) / (GW * 0.35)));
-  const kx = dir * (0.35 + 0.9 * e);      // horizontal shear away from light
-  const ksq = 0.20 + 0.30 * e;            // how far it spills toward the camera
+  const kx = dir * (0.35 + 0.9 * e);   // horizontal shear away from the light
+  const ksq = 0.20 + 0.30 * e;         // spill toward the camera
   const f = frameIndex(a, frame, animT);
-  const d = a.detail || 1;
+  const d = a.detail;
   const w = a.fw / d;
   const h = a.fh / d;
-  const feetY = h - (a.pad || 0) / d; // feet row within the frame, world units
+  const feetY = h - a.pad / d;         // feet row within the frame, world units
   ctx.save();
   ctx.globalAlpha = th.shadowAlpha;
   ctx.translate(Math.round(cx), Math.round(groundY));
@@ -747,178 +717,150 @@ function drawCastShadow(key, cx, groundY, frame, animT) {
   ctx.restore();
 }
 
-/* ---- game objects ---- */
+function drawClouds(th) {
+  const [lx, ly] = sunPos(th);
+  ctx.globalAlpha = th.cloudAlpha;
+  for (const c of scene.clouds) {
+    if (!c.sil) {
+      c.sil = (SPRITES.cloud.src && ART.cloud) ? ART.cloud.img : genCloudSil();
+    }
+    const w = c.fw * GW, h = c.fh * horizonY;
+    const dist = Math.hypot(
+      (c.x + w / 2 - lx) / (GW * 0.75),
+      (c.fy * horizonY + h / 2 - ly) / (horizonY * 0.9));
+    const bucket = Math.min(3, Math.floor(dist * 3));
+    if (bucket !== c.bucket) {   // retint only when the light bucket changes
+      c.bucket = bucket;
+      c.tinted = tintCloud(c.sil, th.cloudLit[bucket], th.cloudShade[bucket]);
+    }
+    ctx.drawImage(c.tinted, Math.round(c.x), Math.round(c.fy * horizonY), Math.round(w), Math.round(h));
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawGround(th) {
+  ctx.fillStyle = th.ground;
+  ctx.fillRect(0, horizonY, GW, GH - horizonY);
+  // lighter dithered haze band along the horizon
+  ctx.fillStyle = th.groundLight;
+  ctx.fillRect(0, horizonY, GW, 5);
+  for (let x = 0; x < GW; x += 4) ctx.fillRect(x, horizonY + 5, 2, 2);
+  ctx.fillStyle = th.groundDark;
+  ctx.fillRect(0, horizonY, GW, 1);
+  for (const t of scene.tufts) {
+    const tx = Math.round(t[0] * (GW - 4)) + 2;
+    const ty = horizonY + 8 + Math.round(t[1] * (GH - horizonY - 14));
+    ctx.fillRect(tx, ty, 2, 1);
+  }
+}
+
+function drawStick() {
+  if (stick.inFlight) {
+    // small blob shadow tracking the ground point under the arc
+    ctx.fillStyle = "rgba(0,0,0,0.25)";
+    const gx = stick.sx + (stick.tx - stick.sx) * stick.t;
+    const gy = stick.sy + (stick.ty - stick.sy) * stick.t;
+    ctx.fillRect(Math.round(gx - 4), Math.round(Math.min(gy, GH - 2)), 8, 2);
+    drawSprite("stick", stick.x, stick.y + 2, 0, 0);
+  } else if (stick.onGround) {
+    drawCastShadow("stick", stick.x, stick.y + 2, 0, 0);
+    drawSprite("stick", stick.x, stick.y + 2, 0, 0);
+  }
+}
+
+function dogSpriteKey() {
+  if (dog.state === "fetch") return dog.dir === "N" ? "runN" : "runNE";
+  if (dog.state === "return") return dog.dir === "S" ? "runS" : "runSW";
+  if (dog.state === "pickup") return "runS";
+  return "idle";
+}
+
+function drawDog() {
+  const key = dogSpriteKey();
+  const frame = dog.state === "pickup" ? 0 : null;
+  drawCastShadow(key, dog.x, dog.y, frame, dog.animT);
+  drawSprite(key, dog.x, dog.y, frame, dog.animT);
+}
+
+function draw() {
+  const th = THEMES[save.theme] || THEMES.day;
+  if (skyCanvas) ctx.drawImage(skyCanvas, 0, 0);
+  else { ctx.fillStyle = th.sky[0]; ctx.fillRect(0, 0, GW, horizonY); }
+  drawClouds(th);
+  drawGround(th);
+  drawStick();
+  drawDog();
+}
+
+/* ============================================================
+ * 7. GAME STATE & LOGIC
+ * ============================================================ */
+
+let save = { score: 0, msgIndex: 0, theme: "day" };
+try {
+  const raw = localStorage.getItem(CONFIG.SAVE_KEY);
+  if (raw) save = Object.assign(save, JSON.parse(raw));
+} catch (e) { /* private mode etc - play without saving */ }
+
+function persist() {
+  try { localStorage.setItem(CONFIG.SAVE_KEY, JSON.stringify(save)); } catch (e) {}
+}
+
+const translateUnlocked = () => save.score >= CONFIG.TRANSLATE_UNLOCK_AT;
+const skyUnlocked = () => translateUnlocked() && save.msgIndex >= MESSAGES.length;
+
 const dog = {
-  x: HOME_X, y: 260,
+  x: HOME_X, y: 272,
   state: "idle",   // idle | fetch | pickup | return
-  dir: "S",
+  dir: "S",        // N | NE | S | SW while moving
   animT: 0,
   pickupT: 0,
 };
 
 const stick = {
-  onGround: false,
   inFlight: false,
-  t: 0,
-  sx: 0, sy: 0, tx: 0, ty: 0,
-  x: 0, y: 0,
+  onGround: false,
+  t: 0,                     // flight progress 0..1
+  sx: 0, sy: 0,             // thrown from (bottom of screen)
+  tx: 0, ty: 0,             // landing point
+  x: 0, y: 0,               // current draw position
 };
 
-/* ---- popups ---- */
-const popupQueue = [];
-let popupOpen = false;
-
-function updateTapLabel() {
-  document.getElementById("bubbleTap").textContent =
-    popupQueue.length > 0 ? "TAP FOR MORE" : "TAP TO CLOSE";
-}
-function queuePopup(text, art) {
-  popupQueue.push({ text, art });
-  if (!popupOpen) showNextPopup();
-  else updateTapLabel(); // a page queued behind the open one
-}
-function showNextPopup() {
-  const p = popupQueue.shift();
-  if (!p) { popupOpen = false; backdropEl.style.display = "none"; bubbleEl.style.display = "none"; return; }
-  popupOpen = true;
-  bubbleTextEl.textContent = p.text;
-  if (p.art) {
-    bubbleArtEl.src = p.art;
-    bubbleArtEl.style.display = "block";
-  } else {
-    bubbleArtEl.style.display = "none";
-  }
-  updateTapLabel();
-  backdropEl.style.display = "block";
-  bubbleEl.style.display = "block";
-}
-function dismissPopup() {
-  if (!popupOpen) return;
-  showNextPopup(); // shows next queued popup or closes
-}
-backdropEl.addEventListener("pointerdown", dismissPopup);
-bubbleEl.addEventListener("pointerdown", dismissPopup);
-
-/* ---- HUD ---- */
-function updateHUD() {
-  scoreEl.textContent = "SCORE " + save.score;
-  if (skyUnlocked()) {
-    themeBtn.style.display = "block";
-    themeBtn.textContent = "SKY: " + THEMES[save.theme].label;
-  }
-}
-themeBtn.addEventListener("pointerdown", (e) => {
-  e.stopPropagation();
-  const i = THEME_ORDER.indexOf(save.theme);
-  save.theme = THEME_ORDER[(i + 1) % THEME_ORDER.length];
-  for (const c of scene.clouds) c.bucket = -1; // retint for the new light
-  rebuildSky();
-  persist();
-  updateHUD();
-});
-
-function toast(text) {
-  toastEl.textContent = text;
-  toastEl.classList.remove("show");
-  void toastEl.offsetWidth; // restart animation
-  toastEl.classList.add("show");
-}
-
-/* ---- input: tap the grass to throw ---- */
-let hintHidden = false;
-canvas.addEventListener("pointerdown", (e) => {
-  if (popupOpen) { dismissPopup(); return; }
-  if (dog.state !== "idle" || stick.inFlight) return;
-  const rect = canvas.getBoundingClientRect();
-  let gx = ((e.clientX - rect.left) / rect.width) * GW;
-  let gy = ((e.clientY - rect.top) / rect.height) * GH;
-  // the whole stick sprite must land on the grass, whatever the
-  // screen shape: margins derive from its actual drawn size
-  const sa = ART.stick;
-  const sd = sa ? (sa.detail || 1) : 1;
-  const stickHalfW = sa ? (sa.fw / sd) / 2 + 1 : 8;
-  const stickH = sa ? (sa.fh - (sa.pad || 0)) / sd : 6;
-  const grassTop = horizonY + stickH + 3;
-  gx = Math.max(stickHalfW, Math.min(GW - stickHalfW, gx));
-  // keep the reachable cone from forcing the stick above the grass
-  gx = Math.min(gx, HOME_X + homeY - grassTop);
-  if (gy < grassTop) gy = grassTop;
-  if (gy > homeY) gy = homeY;
-  // clamp into the dog's reachable cone: it only runs N and NE,
-  // so the stick must land at or above the 45-degree line from home
-  const maxY = homeY - Math.max(0, gx - HOME_X);
-  if (gy > maxY) gy = maxY;
-
+function throwStick(tx, ty) {
   stick.inFlight = true;
   stick.onGround = false;
   stick.t = 0;
-  stick.sx = GW * 0.55;          // thrown from "you", bottom of screen
+  stick.sx = GW * 0.55;     // thrown from "you", off the bottom edge
   stick.sy = GH + 6;
-  stick.tx = gx;
-  stick.ty = gy;
-
-  if (!hintHidden) { hintHidden = true; hintEl.style.opacity = "0"; }
-});
-
-/* ---- fetch complete: points, unlocks, messages ---- */
-function deliver() {
-  stick.onGround = false;
-  const before = save.score;
-  save.score += CONFIG.POINTS_PER_FETCH;
-  toast("+" + CONFIG.POINTS_PER_FETCH);
-
-  const justUnlockedTranslate =
-    before < CONFIG.TRANSLATE_UNLOCK_AT && save.score >= CONFIG.TRANSLATE_UNLOCK_AT;
-
-  if (justUnlockedTranslate) {
-    queuePopup("TRANSLATE UNLOCKED!\n\nyour dog can talk now.\nfetch again to hear it.", null);
-  } else if (translateUnlocked() && save.msgIndex < MESSAGES.length) {
-    const m = MESSAGES[save.msgIndex];
-    save.msgIndex += 1;
-    for (const page of (m.pages || [m])) queuePopup(page.text, page.art);
-    if (save.msgIndex >= MESSAGES.length) {
-      queuePopup("SKY UNLOCKED!\n\nyou can change the sky now.\ntry the button up top.", null);
-    }
-  }
-  persist();
-  updateHUD();
+  stick.tx = tx;
+  stick.ty = ty;
 }
 
-/* ---- update ---- */
-function update(dt) {
-  dog.animT += dt;
-
-  // clouds drift slowly and wrap around
-  for (const c of scene.clouds) {
-    c.x += c.drift * dt;
-    const w = c.fw * GW;
-    if (c.x > GW + 4) c.x = -w - 2;
-    else if (c.x < -w - 4) c.x = GW + 2;
+function updateStickFlight(dt) {
+  stick.t += (dt * 1000) / CONFIG.STICK_FLIGHT_MS;
+  if (stick.t >= 1) {
+    stick.t = 1;
+    stick.inFlight = false;
+    stick.onGround = true;
+    stick.x = stick.tx;
+    stick.y = stick.ty;
+    dog.state = "fetch";
+    dog.animT = 0;
+    return;
   }
+  // straight line to the target plus a sine arc for height
+  stick.x = stick.sx + (stick.tx - stick.sx) * stick.t;
+  stick.y = stick.sy + (stick.ty - stick.sy) * stick.t
+    - Math.sin(stick.t * Math.PI) * GH * 0.22;
+}
 
-  if (stick.inFlight) {
-    stick.t += (dt * 1000) / CONFIG.STICK_FLIGHT_MS;
-    if (stick.t >= 1) {
-      stick.t = 1;
-      stick.inFlight = false;
-      stick.onGround = true;
-      stick.x = stick.tx;
-      stick.y = stick.ty;
-      dog.state = "fetch";
-      dog.animT = 0;
-    } else {
-      const t = stick.t;
-      stick.x = stick.sx + (stick.tx - stick.sx) * t;
-      stick.y = stick.sy + (stick.ty - stick.sy) * t - Math.sin(t * Math.PI) * GH * 0.22;
-    }
-  }
-
+function updateDog(dt) {
   const stepFor = (dir) => CONFIG.DOG_SPEED[dir] * dt;
   const diagFor = (dir) => stepFor(dir) / Math.SQRT2;
 
   if (dog.state === "fetch") {
     const dx = stick.tx - dog.x;
-    const dy = stick.ty - dog.y;   // negative: stick is above dog
+    const dy = stick.ty - dog.y;    // negative: stick is above the dog
     if (dx > 0.5 && dy < -0.5) {
       dog.dir = "NE";
       const diag = diagFor("NE");
@@ -935,7 +877,7 @@ function update(dt) {
       dog.state = "pickup";
       dog.pickupT = 0;
       dog.dir = "S";
-      stick.onGround = false; // in the dog's mouth now (baked into S/SW sprites)
+      stick.onGround = false;  // in the mouth now (baked into S/SW art)
     }
   } else if (dog.state === "pickup") {
     dog.pickupT += dt * 1000;
@@ -944,8 +886,8 @@ function update(dt) {
       dog.animT = 0;
     }
   } else if (dog.state === "return") {
-    const dx = dog.x - HOME_X;     // positive: dog is right of home
-    const dy = homeY - dog.y;      // positive: home is below dog
+    const dx = dog.x - HOME_X;      // positive: dog is right of home
+    const dy = homeY - dog.y;       // positive: home is below the dog
     if (dx > 0.5 && dy > 0.5) {
       dog.dir = "SW";
       const diag = diagFor("SW");
@@ -968,73 +910,167 @@ function update(dt) {
   }
 }
 
-/* ---- draw ---- */
-function draw() {
-  const th = THEMES[save.theme] || THEMES.day;
+/* fetch complete: score it and drive unlocks / messages */
+function deliver() {
+  const before = save.score;
+  save.score += CONFIG.POINTS_PER_FETCH;
+  toast("+" + CONFIG.POINTS_PER_FETCH);
 
-  // sky (pre-rendered: bands, dither, stars, halo, sun/moon)
-  if (skyCanvas) ctx.drawImage(skyCanvas, 0, 0);
-  else { ctx.fillStyle = th.sky[0]; ctx.fillRect(0, 0, GW, horizonY); }
+  const justUnlockedTranslate =
+    before < CONFIG.TRANSLATE_UNLOCK_AT && save.score >= CONFIG.TRANSLATE_UNLOCK_AT;
 
-  // clouds, lit by their distance to the sun/moon
-  const [lsx, lsy] = sunPos(th);
-  ctx.globalAlpha = th.cloudAlpha;
-  for (const c of scene.clouds) {
-    if (!c.sil) {
-      c.sil = (SPRITES.cloud.src && ART.cloud) ? ART.cloud.img : genCloudSil();
+  if (justUnlockedTranslate) {
+    queuePopup("TRANSLATE UNLOCKED!\n\nyour dog can talk now.\nfetch again to hear it.", null);
+  } else if (translateUnlocked() && save.msgIndex < MESSAGES.length) {
+    const m = MESSAGES[save.msgIndex];
+    save.msgIndex += 1;
+    for (const page of (m.pages || [m])) queuePopup(page.text, page.art);
+    if (save.msgIndex >= MESSAGES.length) {
+      queuePopup("SKY UNLOCKED!\n\nyou can change the sky now.\ntry the button up top.", null);
     }
-    const w = c.fw * GW, h = c.fh * horizonY;
-    const d = Math.hypot(
-      (c.x + w / 2 - lsx) / (GW * 0.75),
-      (c.fy * horizonY + h / 2 - lsy) / (horizonY * 0.9));
-    const bucket = Math.min(3, Math.floor(d * 3));
-    if (bucket !== c.bucket) {
-      c.bucket = bucket;
-      c.tinted = tintCloud(c.sil, th.cloudLit[bucket], th.cloudShade[bucket]);
-    }
-    ctx.drawImage(c.tinted, Math.round(c.x), Math.round(c.fy * horizonY), Math.round(w), Math.round(h));
   }
-  ctx.globalAlpha = 1;
-
-  // ground, with a lighter dithered haze band at the horizon
-  ctx.fillStyle = th.ground;
-  ctx.fillRect(0, horizonY, GW, GH - horizonY);
-  ctx.fillStyle = th.groundLight;
-  ctx.fillRect(0, horizonY, GW, 5);
-  for (let x = 0; x < GW; x += 4) ctx.fillRect(x, horizonY + 5, 2, 2);
-  ctx.fillStyle = th.groundDark;
-  ctx.fillRect(0, horizonY, GW, 1);
-  for (const t of scene.tufts) {
-    const tx = Math.round(t[0] * (GW - 4)) + 2;
-    const ty = horizonY + 8 + Math.round(t[1] * (GH - horizonY - 14));
-    ctx.fillRect(tx, ty, 2, 1);
-  }
-
-  // stick (in flight or waiting on the grass)
-  if (stick.inFlight || stick.onGround) {
-    if (stick.inFlight) {
-      // shadow tracks the ground position during flight
-      ctx.fillStyle = "rgba(0,0,0,0.25)";
-      const gx = stick.sx + (stick.tx - stick.sx) * stick.t;
-      const gy = stick.sy + (stick.ty - stick.sy) * stick.t;
-      ctx.fillRect(Math.round(gx - 4), Math.round(Math.min(gy, GH - 2)), 8, 2);
-    }
-    if (stick.onGround) drawCastShadow("stick", stick.x, stick.y + 2, 0, 0);
-    drawSprite("stick", stick.x, stick.y + 2, 0, 0);
-  }
-
-  // dog: cast shadow, then sprite
-  let key;
-  if (dog.state === "fetch") key = dog.dir === "N" ? "runN" : "runNE";
-  else if (dog.state === "return") key = dog.dir === "S" ? "runS" : "runSW";
-  else if (dog.state === "pickup") key = "runS";
-  else key = "idle";
-  const dogFrame = dog.state === "pickup" ? 0 : null;
-  drawCastShadow(key, dog.x, dog.y, dogFrame, dog.animT);
-  drawSprite(key, dog.x, dog.y, dogFrame, dog.animT);
+  persist();
+  updateHUD();
 }
 
-/* ---- main loop ---- */
+function update(dt) {
+  dog.animT += dt;
+  for (const c of scene.clouds) {   // clouds drift slowly and wrap
+    c.x += c.drift * dt;
+    const w = c.fw * GW;
+    if (c.x > GW + 4) c.x = -w - 2;
+    else if (c.x < -w - 4) c.x = GW + 2;
+  }
+  if (stick.inFlight) updateStickFlight(dt);
+  updateDog(dt);
+}
+
+/* ============================================================
+ * 8. UI - HUD, popups, input.
+ * ============================================================ */
+
+const scoreEl = document.getElementById("score");
+const themeBtn = document.getElementById("themeBtn");
+const hintEl = document.getElementById("hint");
+const toastEl = document.getElementById("toast");
+const backdropEl = document.getElementById("backdrop");
+const bubbleEl = document.getElementById("bubble");
+const bubbleTextEl = document.getElementById("bubbleText");
+const bubbleArtEl = document.getElementById("bubbleArt");
+const bubbleTapEl = document.getElementById("bubbleTap");
+
+function updateHUD() {
+  scoreEl.textContent = "SCORE " + save.score;
+  themeBtn.style.display = skyUnlocked() ? "block" : "none";
+  themeBtn.textContent = "SKY: " + (THEMES[save.theme] || THEMES.day).label;
+}
+
+function toast(text) {
+  toastEl.textContent = text;
+  toastEl.classList.remove("show");
+  void toastEl.offsetWidth;   // restart the animation
+  toastEl.classList.add("show");
+}
+
+/* --- speech bubble: a queue of pages, one tap per page --- */
+const popupQueue = [];
+let popupOpen = false;
+
+function updateTapLabel() {
+  bubbleTapEl.textContent = popupQueue.length > 0 ? "TAP FOR MORE" : "TAP TO CLOSE";
+}
+
+function queuePopup(text, art) {
+  popupQueue.push({ text, art });
+  if (!popupOpen) showNextPopup();
+  else updateTapLabel();   // a page queued behind the open one
+}
+
+function showNextPopup() {
+  const p = popupQueue.shift();
+  if (!p) {
+    popupOpen = false;
+    backdropEl.style.display = "none";
+    bubbleEl.style.display = "none";
+    return;
+  }
+  popupOpen = true;
+  bubbleTextEl.textContent = p.text;
+  if (p.art) {
+    bubbleArtEl.src = p.art;
+    bubbleArtEl.style.display = "block";
+  } else {
+    bubbleArtEl.style.display = "none";
+  }
+  updateTapLabel();
+  backdropEl.style.display = "block";
+  bubbleEl.style.display = "block";
+}
+
+backdropEl.addEventListener("pointerdown", showNextPopup);
+bubbleEl.addEventListener("pointerdown", showNextPopup);
+
+/* --- theme button --- */
+themeBtn.addEventListener("pointerdown", (e) => {
+  e.stopPropagation();
+  const i = THEME_ORDER.indexOf(save.theme);
+  save.theme = THEME_ORDER[(i + 1) % THEME_ORDER.length];
+  for (const c of scene.clouds) c.bucket = -1;   // retint for the new light
+  rebuildSky();
+  persist();
+  updateHUD();
+});
+
+/* --- throwing: tap the grass --- */
+let hintShown = true;
+
+canvas.addEventListener("pointerdown", (e) => {
+  if (popupOpen) { showNextPopup(); return; }
+  if (dog.state !== "idle" || stick.inFlight) return;
+
+  const rect = canvas.getBoundingClientRect();
+  let gx = ((e.clientX - rect.left) / rect.width) * GW;
+  let gy = ((e.clientY - rect.top) / rect.height) * GH;
+
+  // the whole stick sprite must land on the grass, whatever the
+  // screen shape: margins derive from its actual drawn size
+  const sa = ART.stick;
+  const stickHalfW = sa ? (sa.fw / sa.detail) / 2 + 1 : 8;
+  const stickH = sa ? (sa.fh - sa.pad) / sa.detail : 6;
+  const grassTop = horizonY + stickH + 3;
+  gx = Math.max(stickHalfW, Math.min(GW - stickHalfW, gx));
+  // keep the reachable cone (below) from pushing it into the sky
+  gx = Math.min(gx, HOME_X + homeY - grassTop);
+  gy = Math.max(grassTop, Math.min(homeY, gy));
+  // clamp into the dog's reachable cone: it only runs N and NE,
+  // so the stick must land at or above the 45-degree line from home
+  const coneY = homeY - Math.max(0, gx - HOME_X);
+  if (gy > coneY) gy = coneY;
+
+  throwStick(gx, gy);
+  if (hintShown) { hintShown = false; hintEl.style.opacity = "0"; }
+});
+
+/* --- debug: tap the score 7 times quickly to reset progress --- */
+let resetTaps = 0, resetTimer = null;
+scoreEl.addEventListener("pointerdown", () => {
+  resetTaps += 1;
+  clearTimeout(resetTimer);
+  resetTimer = setTimeout(() => { resetTaps = 0; }, 1500);
+  if (resetTaps >= 7) {
+    resetTaps = 0;
+    save = { score: 0, msgIndex: 0, theme: "day" };
+    persist();
+    rebuildSky();
+    updateHUD();
+    toast("RESET");
+  }
+});
+
+/* ============================================================
+ * 9. BOOT
+ * ============================================================ */
+
 let lastT = 0;
 function frame(now) {
   const dt = Math.min(0.05, (now - lastT) / 1000 || 0);
@@ -1044,34 +1080,13 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 
-/* ---- debug helper: tap the score 7 times quickly to reset ---- */
-let resetTaps = 0, resetTimer = null;
-scoreEl.style.pointerEvents = "auto";
-scoreEl.addEventListener("pointerdown", () => {
-  resetTaps += 1;
-  clearTimeout(resetTimer);
-  resetTimer = setTimeout(() => { resetTaps = 0; }, 1500);
-  if (resetTaps >= 7) {
-    resetTaps = 0;
-    save = { score: 0, msgIndex: 0, theme: "day" };
-    persist();
-    themeBtn.style.display = "none";
-    updateHUD();
-    toast("RESET");
-  }
-});
-
-/* ---- boot ---- */
 window.addEventListener("resize", resize);
 resize();
-dog.x = HOME_X;
-dog.y = homeY;
 updateHUD();
 loadSprites().then(() => {
   rebuildSky();
   requestAnimationFrame(frame);
 });
 </script>
-
 </body>
 </html>
