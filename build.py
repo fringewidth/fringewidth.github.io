@@ -54,7 +54,14 @@ MD_EXTENSIONS = ["extra", "sane_lists"]
 def read_json(path, default=None):
     if not path.exists():
         return default
-    return json.loads(path.read_text(encoding="utf-8"))
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise SystemExit(
+            f"error: {path.name} is not valid JSON\n"
+            f"  {error}\n"
+            "  a trailing comma after the last item in a list is the usual cause"
+        ) from error
 
 
 def load_page(path):
@@ -104,6 +111,8 @@ def collect_pages():
                 "description": str(meta.get("description") or ""),
                 "aliases": as_list(meta.get("aliases")),
                 "sitemap": meta.get("sitemap", True),
+                "noindex": meta.get("noindex", False),
+                "image": str(meta.get("image") or ""),
                 "body": post.content,
             }
         )
@@ -178,6 +187,66 @@ def expand_news(body, md):
     return NEWS_MARKER.sub(replace, body)
 
 
+def head_extra(page, site, base_url):
+    """The conditional head tags, so the template holds no empty ones."""
+    tags = []
+
+    image = page["image"] or site.get("image", "")
+    if image:
+        url = image if image.startswith("http") else base_url + image
+        tags.append(f'<meta property="og:image" content="{url}">')
+        tags.append(f'<meta name="twitter:image" content="{url}">')
+    # Without an image a large card renders as an empty box, so only ask for
+    # one when there is something to put in it.
+    tags.append(
+        '<meta name="twitter:card" content="'
+        + ("summary_large_image" if image else "summary")
+        + '">'
+    )
+
+    if page["noindex"]:
+        tags.append('<meta name="robots" content="noindex, follow">')
+
+    # Lets Google show "hrishik.me > projects" in place of the raw URL.
+    if page["slug"] != "":
+        crumbs = [("home", base_url + "/"), (page["title"], base_url + page["url"])]
+        breadcrumbs = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": position,
+                    "name": name,
+                    "item": url,
+                }
+                for position, (name, url) in enumerate(crumbs, start=1)
+            ],
+        }
+        tags.append(
+            '<script type="application/ld+json">'
+            + json.dumps(breadcrumbs, ensure_ascii=False)
+            + "</script>"
+        )
+
+    # Tells search engines that the accounts linked from the homepage are the
+    # same person as the subject of the site.
+    if page["slug"] == "" and site.get("person"):
+        person = {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "url": base_url + "/",
+            **site["person"],
+        }
+        tags.append(
+            '<script type="application/ld+json">'
+            + json.dumps(person, ensure_ascii=False)
+            + "</script>"
+        )
+
+    return "\n  ".join(tags)
+
+
 def fill(template, values):
     for key, value in values.items():
         template = template.replace("{{" + key + "}}", value)
@@ -246,6 +315,7 @@ def build():
                 "site_name": html.escape(site["name"]),
                 "nav": nav,
                 "redirects": redirects,
+                "head_extra": head_extra(page, site, base_url),
                 "content": content,
             },
         )
@@ -277,8 +347,6 @@ def build():
         f"User-agent: *\nAllow: /\n\nSitemap: {base_url}/sitemap.xml\n",
         encoding="utf-8",
     )
-    shutil.copy2(OUT / "index.html", OUT / "404.html")
-
     print(f"built {len(written)} pages into {OUT.relative_to(ROOT)}/")
     for url in sorted(written):
         print(f"  {url}")

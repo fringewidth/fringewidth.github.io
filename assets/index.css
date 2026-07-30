@@ -54,6 +54,11 @@ footer {
   text-align: center;
 }
 
+/* The clock is filled in by JS, so reserve its line to avoid a layout shift. */
+#footer {
+  min-height: 1.6em;
+}
+
 hr {
   border: none;
   height: 1px;

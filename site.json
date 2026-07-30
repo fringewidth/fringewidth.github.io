@@ -3,9 +3,24 @@
   "title": "hrishik sai bojnal",
   "url": "https://hrishik.me",
   "description": "hrishik sai bojnal: guy with a concerning amount of side quests",
+  "image": "/assets/og.png",
   "nav": [
     { "slug": "", "label": "home" },
     { "slug": "projects", "label": "projects" },
     { "slug": "publications", "label": "publications" }
-  ]
+  ],
+  "person": {
+    "name": "Hrishik Sai Bojnal",
+    "alternateName": "fringewidth",
+    "sameAs": [
+      "https://github.com/fringewidth",
+      "https://x.com/saibojnal",
+      "https://www.kaggle.com/fringewidth",
+      "https://www.lesswrong.com/users/hrishik-sai-bojnal",
+      "https://monkeytype.com/profile/fringewidth",
+      "https://in.linkedin.com/in/hrishiksai",
+      "https://scholar.google.com/citations?user=NF44u5UAAAAJ&hl=en",
+      "https://www.researchgate.net/profile/Hrishik-Sai-Bojnal"
+    ]
+  }
 }
