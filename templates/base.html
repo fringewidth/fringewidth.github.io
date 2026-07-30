@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <meta name="description" content="{{description}}">
+  <link rel="canonical" href="{{canonical}}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{site_title}}">
+  <meta property="og:title" content="{{title}}">
+  <meta property="og:description" content="{{description}}">
+  <meta property="og:url" content="{{canonical}}">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="/assets/index.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <script>
+    // The site used to be a single page that loaded markdown over XHR, so old
+    // links look like /?content=projects.md. Send those to the real page.
+    (function () {
+      var content = new URLSearchParams(location.search).get("content");
+      if (!content) return;
+      var target = ({{redirects}})[content.replace(/^\//, "")];
+      if (target) location.replace(target + location.hash);
+    })();
+  </script>
+</head>
+
+<body>
+  <a class="header" href="/">
+    <h1>{{site_name}}</h1>
+  </a>
+  <nav id="navbar">
+    <ul>
+{{nav}}
+    </ul>
+  </nav>
+  <main id="content">
+{{content}}
+  </main>
+  <footer>
+    <div id="footer"></div>
+  </footer>
+  <script src="/assets/footer.js" defer></script>
+  <script src="/assets/news.js" defer></script>
+</body>
+
+</html>

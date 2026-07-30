@@ -1,0 +1,11 @@
+{
+  "name": "hrishik",
+  "title": "hrishik sai bojnal",
+  "url": "https://hrishik.me",
+  "description": "hrishik sai bojnal: guy with a concerning amount of side quests",
+  "nav": [
+    { "slug": "", "label": "home" },
+    { "slug": "projects", "label": "projects" },
+    { "slug": "publications", "label": "publications" }
+  ]
+}

@@ -1,3 +1,9 @@
+---
+title: publications
+description: stuff my professors in college convinced me to publish
+aliases: papers
+---
+
 P.S. You can find a slightly more detailed overview of my college research here: [hrishik.me/papers](https://hrishik.me/papers)
 
 ---
@@ -8,7 +14,7 @@ Me 👋; Parnika Singh; Anitha J (CSITSS 2024)
 
 We built a graph-based algorithm to spot and remove redundant features in big datasets by treating highly correlated features as connected nodes. It runs faster than PCA and does better for storage and training.
 
-This algorithm was the preliminary version of what became [Raven](/?content=projects.md#projects-raven)
+This algorithm was the preliminary version of what became [Raven](projects.md#projects-raven)
 
 ---
 

@@ -1,7 +1,8 @@
+---
+title: news
+description: what i've been up to lately (if i remember to update this list)
+---
+
 ## News
 
-<table id="newspage_news" class="newstable"></table>
-
-<script>
-    populateNews("newspage_news", null)
-</script>
+<!-- news all -->

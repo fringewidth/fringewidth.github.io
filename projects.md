@@ -1,3 +1,8 @@
+---
+title: projects
+description: things i've built
+---
+
 Some of the stuff I built:
 
 ---
@@ -89,16 +94,3 @@ _Java, Python, SciPy, JUnit_ | ([Source](https://github.com/fringewidth/jfit2))
 
 [Also ported it to C++](https://github.com/fringewidth/cppFit).
 
----
-
-#### 📑 This Website! {#projects-portfolio}
-
-_HTML, CSS, jQuery_
-
-- Wrote a tiny HTML+jQuery script that turns interlinked MD files into a full website. You can find this page's source [here](https://github.com/fringewidth/fringewidth.github.io/blob/main/projects.md), and the full repo [here](https://github.com/fringewidth/fringewidth.github.io).
-- Yes, there are existing solutions that do this, but this one has a data footprint of 150kb and is a proud member of the [512kb Club](https://512kb.club)🪶.
-- Also hacking together your website from scratch is very fun.
-
-After building grandiose websites, you tend to admire the simplicity of the early internet.
-
-Thanks to [Marked](https://marked.js.org/), there's only about 80 lines of HTML, most of it is for this footer ⬇️.

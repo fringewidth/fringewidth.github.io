@@ -1,3 +1,8 @@
+---
+title: unsupervised discovery of steering vectors
+description: searching for interpretable steering vectors without supervision, and comparing them against LoRA-derived behaviours.
+---
+
 # **Unsupervised Discovery of Steering Vectors**
 
 # **Executive Summary ([Code](https://github.com/fringewidth/steer-clear))**
