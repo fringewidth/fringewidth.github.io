@@ -1,4 +1,4 @@
-hi. i'm hrishik sai bojnal. i am interested in emergent consciousness. find me at:
+hi. i'm hrishik sai bojnal. i peaked in college. find me at:
 
 - 🐙 [github](https://github.com/fringewidth)
 - 🐦 [twitter](https://x.com/saibojnal)
