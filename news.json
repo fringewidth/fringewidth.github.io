@@ -1,11 +1,15 @@
 [
   {
     "date": "2026-10-15",
+    "headline": "I hit another record in the [Big O Speedrun](https://bigospeedrun.com/other/catalan), this time, I reduced the lower bound of the irrationality exponent of Catalan's constant mu(G) to 2401.74 from a previous value of 2715"
+  },
+  {
+    "date": "2026-10-15",
     "headline": "I (my claude) found a 0.00000015 improvement to the Big O complexity of the All Pairs Shortest Path algorithm. It stands at [O(n^2.99556085)](https://bigospeedrun.com/apsp) now. I would like to quote [David Brandt](https://en.wikipedia.org/wiki/David_Brandt_(farmer)) when they inevitably give me the turing award for this."
   },
   {
     "date": "2026-10-13",
-    "headline": "I open sourced [huvu](https://github.com/fringewidth/huvu), proactive, personal agent that learns every behaviour and connects with everything"
+    "headline": "I open sourced [huvu](https://github.com/fringewidth/huvu), a proactive, personal agent that learns every behaviour and connects with everything"
   },
   {
     "date": "2026-09-26",
