@@ -1,11 +1,11 @@
 [
   {
-    "date": "2026-10-15",
-    "headline": "I hit another record in the [Big O Speedrun](https://bigospeedrun.com/other/catalan), this time, I reduced the lower bound of the irrationality exponent of Catalan's constant mu(G) to 2401.74 from a previous value of 2715"
+    "date": "2026-10-19",
+    "headline": "More Big O Speedrun records: [3SUM](https://bigospeedrun.com/3sum) and the [exact DFT](https://bigospeedrun.com/exact-dft). Three years ago I solved 3SUM on LeetCode for the first time. Imagine telling me back then that the chatbot I used for the [occasional bug fix](https://chatgpt.com/share/6ad61a18-06bc-83e8-8c27-eceadaaeae12) would breach the algorithmic frontier on the same problem."
   },
   {
     "date": "2026-10-15",
-    "headline": "I (my claude) found a 0.00000015 improvement to the Big O complexity of the All Pairs Shortest Path algorithm. It stands at [O(n^2.99556085)](https://bigospeedrun.com/apsp) now. I would like to quote [David Brandt](https://en.wikipedia.org/wiki/David_Brandt_(farmer)) when they inevitably give me the turing award for this."
+    "headline": "I hit another record in the [Big O Speedrun](https://bigospeedrun.com/other/catalan), this time, I reduced the lower bound of the irrationality exponent of Catalan's constant mu(G) to 2401.74 from a previous value of 2715"
   },
   {
     "date": "2026-10-13",
@@ -168,11 +168,7 @@
     "headline": "My team won the IEEE inaugural debate competition. We won against 9 teams over three rounds. We debated on electric vehicles, government surveillance, and the influence of social media."
   },
   {
-    "date": "2022-01-02",
-    "headline": "I joined the prestigious [RV Institute of Technology and Management](https://rvitm.edu.in/) as student of computer science and engineering."
-  },
-  {
     "date": "2021-09-20",
-    "headline": "I've ranked 3078 in [KCET](https://en.wikipedia.org/wiki/Common_Entrance_Test), the state's engineering entrance exam. This puts me in the top 1.59% out of 193,447 candidates this year!"
+    "headline": "I've ranked 3078 in [KCET](https://en.wikipedia.org/wiki/Common_Entrance_Test), the state's engineering entrance exam. This puts me in the top 1.53% of the 201,834 candidates who registered this year!"
   }
 ]
