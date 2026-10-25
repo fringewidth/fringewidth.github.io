@@ -3,7 +3,7 @@ title: home
 description: "hrishik sai bojnal: a guy with a concerning amount of side quests"
 ---
 
-hi. i'm hrishik sai bojnal. i peaked in college. find me at:
+hi. i'm hrishik sai bojnal. find me at:
 
 - 🐙 [github](https://github.com/fringewidth)
 - 🐦 [twitter](https://x.com/saibojnal)
